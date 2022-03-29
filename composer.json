@@ -36,6 +36,8 @@
     ]
   },
   "require": {
-    "endurance/wp-module-data": "^1.8"
+    "newfold-labs/wp-module-data": "^2.0.0",
+    "wpscholar/url": "^1.2",
+    "wp-forge/helpers": "^1.1.0"
   }
 }
