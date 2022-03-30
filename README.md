@@ -29,9 +29,9 @@ A module for managing Newfold in-site notifications.
 
 ## TODO:
 
-- [ ] Clean up/standardize REST API endpoints so they can be versioned at the module level (e.g.
+- [x] Clean up/standardize REST API endpoints so they can be versioned at the module level (e.g.
   `wp-json/newfold-notifications/v1/*` and `wp-json/newfold-data/v1/*`).
-- [ ] Clean up remaining references to `bluehost` and `bh_` (text domains, notification display context - use
+- [x] Clean up remaining references to `bluehost` and `bh_` (text domains, notification display context - use
   "newfold-notifications", filter prefixes, etc.) If necessary, we can leverage the container to get the ID of a
   plugin (e.g. `bluehost`, `hostgator`, `web`, etc.)
 - [ ] Take the React [notifications component](https://github.com/bluehost/bluehost-wordpress-plugin/blob/575c9dfc7ad9e2cc7a3932ebc9e5a07505108d7c/src/app/components/organisms/bwa-notification/index.js)

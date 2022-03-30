@@ -6,6 +6,8 @@ use NewfoldLabs\WP\Module\Data\HiiveConnection;
 use WP_Forge\Helpers\Arr;
 use wpscholar\Url;
 
+use function NewfoldLabs\WP\ModuleLoader\container;
+
 /**
  * Class Notification
  *
@@ -113,16 +115,16 @@ class Notification {
 			switch ( $context ) {
 
 				case 'wp-admin-notice': // phpcs:ignore PSR2.ControlStructures.SwitchDeclaration.TerminatingComment
-					// Don't show standard WordPress admin notices on the Bluehost plugin pages.
-					if ( false !== strpos( Url::getCurrentUrl(), 'admin.php?page=bluehost' ) ) {
+					// Don't show standard WordPress admin notices on the plugin pages.
+					if ( false !== strpos( Url::getCurrentUrl(), 'admin.php?page=' . container()->plugin()->id ) ) {
 						return false;
 					}
 
-				case 'bluehost-plugin':
+				case container()->plugin()->id . '-plugin':
 					// The current page
 					$current_page = Arr::get( $contextData, 'page' );
 
-					// If bluehost-plugin: Page is the value of the Bluehost plugin page hash (e.g. /home).
+					// If plugin: Page is the value of the plugin page hash (e.g. /home).
 					// If wp-admin-notice: Page is the URL path relative to the wp-admin/ directory.
 					$pages = Arr::get( $location, 'pages', array() );
 

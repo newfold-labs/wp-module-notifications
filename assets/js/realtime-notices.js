@@ -106,7 +106,7 @@
 			e.preventDefault();
 			this.removeElement();
 			window.fetch(
-				`${ window.newfoldRealtimeNotices.restApiUrl }newfold/v1/notifications/${ this.id }`,
+				`${ window.newfoldRealtimeNotices.restApiUrl }newfold-notifications/v1/notifications/${ this.id }`,
 				{
 					credentials: 'same-origin',
 					method: 'DELETE',
@@ -120,7 +120,7 @@
 
 		trackClick(e) {
 			const data = {
-				action: 'bluehost-notification-click',
+				action: 'newfold-notification-click',
 				data: {
 					element: e.target.nodeName.toLowerCase(),
 					label: e.target.innerText,
@@ -132,7 +132,7 @@
 				data.href = e.target.getAttribute('href');
 			}
 			window.fetch(
-				`${ window.newfoldRealtimeNotices.restApiUrl }bluehost/v1/data/events/`,
+				`${ window.newfoldRealtimeNotices.restApiUrl }newfold-data/v1/events/`,
 				{
 					credentials: 'same-origin',
 					method: 'POST',
@@ -190,7 +190,7 @@
 			event.queue = false;
 			window
 				.fetch(
-					`${ window.newfoldRealtimeNotices.restApiUrl }newfold/v1/notifications/events`,
+					`${ window.newfoldRealtimeNotices.restApiUrl }newfold-notifications/v1/notifications/events`,
 					{
 						credentials: 'same-origin',
 						method: 'POST',

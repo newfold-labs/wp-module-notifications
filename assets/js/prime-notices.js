@@ -1,7 +1,7 @@
 const domReady = wp.domReady;
 const apiFetch = wp.apiFetch;
 
-const primeTransient = () => apiFetch({ path: '/newfold/v1/notifications?context=wp-admin-prime'});
+const primeTransient = () => apiFetch({ path: '/newfold-notifications/v1/notifications?context=wp-admin-prime'});
 
 if ('requestIdleCallback' in window) {
     window.requestIdleCallback(primeTransient, { timeout: 2500 });

@@ -4,6 +4,8 @@ namespace NewFoldLabs\WP\Module\Notifications;
 
 use WP_Forge\Helpers\Arr;
 
+use function NewfoldLabs\WP\ModuleLoader\container;
+
 /**
  * Class NotificationsApi
  */
@@ -16,7 +18,7 @@ class NotificationsApi {
 
 		// Add route for fetching notifications
 		register_rest_route(
-			'newfold/v1',
+			'newfold-notifications/v1',
 			'/notifications',
 			array(
 				'methods'             => \WP_REST_Server::READABLE,
@@ -43,18 +45,18 @@ class NotificationsApi {
 						->values();
 
 					// TODO: Remove test code
-//					$results[] = [
-//						'id'         => 'test',
-//						'locations'  => [
-//							[
-//								'context' => 'bluehost-plugin',
-//								//'context' => 'wp-admin-notice',
-//								'pages'   => 'all',
-//							]
-//						],
-//						'expiration' => '2026-01-19T15:46:34.475088Z',
-//						'content'    => 'HELLOW THERE!',
-//					];
+					$results[] = [
+						'id'         => 'test',
+						'locations'  => [
+							[
+								'context' => container()->plugin()->id . '-plugin',
+								// 'context' => 'wp-admin-notice',
+								'pages'   => 'all',
+							]
+						],
+						'expiration' => '2026-01-19T15:46:34.475088Z',
+						'content'    => 'HELLOW THERE!',
+					];
 
 					return rest_ensure_response( $results );
 				},
@@ -63,7 +65,7 @@ class NotificationsApi {
 						'required'          => true,
 						'validate_callback' => function ( $value ) {
 							return is_string( $value ) && in_array( $value, array(
-									'bluehost-plugin',
+									container()->plugin()->id . '-plugin',
 									'wp-admin-notice',
 									'wp-admin-prime'
 								), true );
@@ -73,7 +75,7 @@ class NotificationsApi {
 						'required'          => false,
 						'validate_callback' => function ( $value, \WP_REST_Request $request ) {
 							$context = $request->get_param( 'context' );
-							if ( 'bluehost-plugin' === $context || 'wp-admin-notice' === $context ) {
+							if ( container()->plugin()->id . '-plugin' === $context || 'wp-admin-notice' === $context ) {
 								return is_string( $value );
 							}
 
@@ -89,14 +91,14 @@ class NotificationsApi {
 
 		// Add route for dispatching events
 		register_rest_route(
-			'newfold/v1',
+			'newfold-notifications/v1',
 			'/notifications/events',
 			array(
 				'methods'             => \WP_REST_Server::CREATABLE,
 				'args'                => array(
 					'action'   => array(
 						'required'          => true,
-						'description'       => __( 'Event action', 'bluehost-wordpress-plugin' ),
+						'description'       => __( 'Event action', 'newfold-module-notifications' ),
 						'type'              => 'string',
 						'sanitize_callback' => function ( $value ) {
 							return sanitize_title( $value );
@@ -104,19 +106,19 @@ class NotificationsApi {
 					),
 					'category' => array(
 						'default'           => 'admin',
-						'description'       => __( 'Event category', 'bluehost-wordpress-plugin' ),
+						'description'       => __( 'Event category', 'newfold-module-notifications' ),
 						'type'              => 'string',
 						'sanitize_callback' => function ( $value ) {
 							return sanitize_title( $value );
 						},
 					),
 					'data'     => array(
-						'description' => __( 'Event data', 'bluehost-wordpress-plugin' ),
+						'description' => __( 'Event data', 'newfold-module-notifications' ),
 						'type'        => 'object',
 					),
 					'queue'    => array(
 						'default'           => true,
-						'description'       => __( 'Whether or not to queue the event', 'bluehost-wordpress-plugin' ),
+						'description'       => __( 'Whether or not to queue the event', 'newfold-module-notifications' ),
 						'type'              => 'boolean',
 						'sanitize_callback' => function ( $value ) {
 							return filter_var( $value, FILTER_VALIDATE_BOOLEAN );
@@ -128,7 +130,7 @@ class NotificationsApi {
 				},
 				'callback'            => function ( \WP_REST_Request $request ) {
 
-					$request = new \WP_REST_Request( 'POST', '/bluehost/v1/data/events' );
+					$request = new \WP_REST_Request( 'POST', '/newfold-data/v1/events' );
 					$request->set_body( \WP_REST_Server::get_raw_data() );
 					$request->set_header( 'Content-Type', 'application/json' );
 					$response = rest_do_request( $request );
@@ -151,7 +153,7 @@ class NotificationsApi {
 
 		// Add route for dismissing notifications
 		register_rest_route(
-			'newfold/v1',
+			'newfold-notifications/v1',
 			'/notifications/(?P<id>[a-zA-Z0-9-]+)',
 			array(
 				'methods'             => \WP_REST_Server::DELETABLE,

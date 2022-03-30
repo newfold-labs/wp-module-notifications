@@ -7,7 +7,7 @@
 			const id = notice.getAttribute('data-id');
 			notice.parentNode.removeChild(notice);
 			window.fetch(
-				`${ window.newfoldNotices.restApiUrl }newfold/v1/notifications/${ id }`,
+				`${ window.newfoldNotices.restApiUrl }newfold-notificaitions/v1/notifications/${ id }`,
 				{
 					credentials: 'same-origin',
 					method: 'DELETE',
@@ -24,7 +24,7 @@
 		const notice = e.target.closest('.newfold-notice');
 		if (notice) {
 			const data = {
-				action: 'bluehost-notification-click',
+				action: 'newfold-notification-click',
 				data: {
 					element: e.target.nodeName.toLowerCase(),
 					label: e.target.innerText,
@@ -36,7 +36,7 @@
 				data.href = e.target.getAttribute('href');
 			}
 			window.fetch(
-				`${ window.newfoldNotices.restApiUrl }bluehost/v1/data/events/`,
+				`${ window.newfoldNotices.restApiUrl }newfold-data/v1/events/`,
 				{
 					credentials: 'same-origin',
 					method: 'POST',

@@ -2,11 +2,13 @@
 
 namespace NewFoldLabs\WP\Module\Notifications;
 
+use function NewfoldLabs\WP\ModuleLoader\container;
+
 add_action( 'admin_notices', array( AdminNotices::class, 'maybeRenderAdminNotices' ) );
 add_action( 'rest_api_init', array( NotificationsApi::class, 'registerRoutes' ) );
 
 add_action(
-	'bh_event_log',
+	'nfd_event_log',
 	function ( $key ) {
 		$events = array(
 			'login',
@@ -26,12 +28,12 @@ add_action(
 );
 
 add_filter(
-	'bluehost_admin_page_data',
+	container()->plugin()->id . '_admin_page_data',
 	function ( $data ) {
 
 		// Grab the latest settings using an internal REST API request
-		$request = new \WP_REST_Request( 'GET', '/newfold/v1/notifications' );
-		$request->set_query_params( array( 'context' => 'bluehost-plugin' ) );
+		$request = new \WP_REST_Request( 'GET', '/newfold-notifications/v1/notifications' );
+		$request->set_query_params( array( 'context' => container()->plugin()->id . '-plugin' ) );
 		$response = rest_do_request( $request );
 		$server   = rest_get_server();
 

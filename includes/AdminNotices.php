@@ -17,7 +17,7 @@ class AdminNotices {
 
 		$screen = get_current_screen();
 
-		if ( 'toplevel_page_bluehost' === $screen->id ) {
+		if ( false !== strpos( $screen->id, container()->plugin()->id ) ) {
 			// We already handle notifications in our React app.
 			return;
 		}
