@@ -134,9 +134,9 @@ class NotificationsApi {
 					$request->set_body( \WP_REST_Server::get_raw_data() );
 					$request->set_header( 'Content-Type', 'application/json' );
 					$response = rest_do_request( $request );
-					// The hub API returns arrays of Notification objects. Each Notification has an array of
+					// The hiive API returns arrays of Notification objects. Each Notification has an array of
 					// location objects. However, the WP REST API converts all nested objects to
-					// associative arrays in a standard HTTP response. Since this proxing through an internal
+					// associative arrays in a standard HTTP response. Since this proxying through an internal
 					// request, we end up with the original nested objects.
 					// The encode/decode here standardizes to all associative arrays.
 					$data = json_decode( wp_json_encode( $response->data ), true );

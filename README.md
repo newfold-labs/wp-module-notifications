@@ -34,6 +34,7 @@ A module for managing Newfold in-site notifications.
 - [x] Clean up remaining references to `bluehost` and `bh_` (text domains, notification display context - use
   "newfold-notifications", filter prefixes, etc.) If necessary, we can leverage the container to get the ID of a
   plugin (e.g. `bluehost`, `hostgator`, `web`, etc.)
+- [x] Update notifications to have a container and always load scripts in admin so event listeners can be attached to contaienr (for CTB updates)
 - [ ] Take the React [notifications component](https://github.com/bluehost/bluehost-wordpress-plugin/blob/575c9dfc7ad9e2cc7a3932ebc9e5a07505108d7c/src/app/components/organisms/bwa-notification/index.js)
   [reducers](https://github.com/bluehost/bluehost-wordpress-plugin/blob/c842ce4925f567eab754154d0a2d52483dd79534/src/app/store/reducer.js#L47-L55)
   and [actions](https://github.com/bluehost/bluehost-wordpress-plugin/blob/c842ce4925f567eab754154d0a2d52483dd79534/src/app/store/actions.js)
@@ -41,9 +42,10 @@ A module for managing Newfold in-site notifications.
   the vendor directory for now. We'll probably need to update the component to accept the data store as a prop and maybe
   some other things as well.
 - [ ] Ensure that notifications are working properly in the following contexts:
+    - [x] Admin notices on standard WP admin pages
     - [ ] Realtime notices on the plugins page
-    - [ ] Admin notices on standard WP admin pages
     - [ ] Notices within our plugin-specific React app
+- [ ] Clean up terminology to make it consistent - notification vs notice.
 
 Note: The `NotificationsApi.php` file around line #45 has some commented out test code which will let you mock a
 notification for testing.
