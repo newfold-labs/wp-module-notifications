@@ -80,22 +80,25 @@ class AdminNotices {
 	 */
 	public static function adminScripts(){
 
-		// Enqueue and set local values for realtime script
-		wp_enqueue_script(
-			'newfold-plugin-realtime-notices',
-			plugins_url( 'vendor/newfold-labs/wp-module-notifications/assets/js/realtime-notices.js', container()->plugin()->file ),
-			array( 'lodash' ),
-			container()->plugin()->version,
-			true
-		);
-		wp_localize_script(
-			'newfold-plugin-realtime-notices',
-			'newfoldRealtimeNotices',
-			array(
-				'restApiUrl'   => esc_url_raw( rest_url() ),
-				'restApiNonce' => wp_create_nonce( 'wp_rest' ),
-			)
-		);
+		// Handle realtime notifications
+		if ( 'plugin-install' === $screen->id ) {
+			// Enqueue and set local values for realtime script
+			wp_enqueue_script(
+				'newfold-plugin-realtime-notices',
+				plugins_url( 'vendor/newfold-labs/wp-module-notifications/assets/js/realtime-notices.js', container()->plugin()->file ),
+				array( 'lodash' ),
+				container()->plugin()->version,
+				true
+			);
+			wp_localize_script(
+				'newfold-plugin-realtime-notices',
+				'newfoldRealtimeNotices',
+				array(
+					'restApiUrl'   => esc_url_raw( rest_url() ),
+					'restApiNonce' => wp_create_nonce( 'wp_rest' ),
+				)
+			);
+		}
 
 		// Enqueue and set local values for dismiss script
 		wp_enqueue_script(
