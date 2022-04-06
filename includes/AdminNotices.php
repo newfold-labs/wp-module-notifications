@@ -79,11 +79,11 @@ class AdminNotices {
 	 * Handle scripts
 	 */
 	public static function adminScripts(){
-		$screen = get_current_screen();
-
+		
 		// Handle realtime notifications
+		$screen = get_current_screen();
 		if ( 'plugin-install' === $screen->id ) {
-			// Enqueue and set local values for realtime script
+			// Enqueue and set local values for realtime script on plugin install page only
 			wp_enqueue_script(
 				'newfold-plugin-realtime-notices',
 				plugins_url( 'vendor/newfold-labs/wp-module-notifications/assets/js/realtime-notices.js', container()->plugin()->file ),
