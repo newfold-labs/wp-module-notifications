@@ -28,7 +28,7 @@ const Notifications = (props) => {
     // on mount load all notifications from module api
     useEffect(() => {
         props.apiFetch( {
-            url: `${props.resturl}/newfold-notifications/v1/notifications&context=wp-admin-prime`
+            url: `${props.resturl}/newfold-notifications/v1/notifications&context=${props.context}`
         }).then( ( response ) => {
             setAllNotifications(response);
 		});
@@ -39,7 +39,7 @@ const Notifications = (props) => {
         setActiveNotifications(
             filterNotifications(allNotifications)
         );
-	}, [allNotifications, props.page, props.context]);
+	}, [allNotifications, props.page]);
 
     /**
      * Wrapper method to filter notifications
