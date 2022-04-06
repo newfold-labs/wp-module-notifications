@@ -79,6 +79,7 @@ class AdminNotices {
 	 * Handle scripts
 	 */
 	public static function adminScripts(){
+		$screen = get_current_screen();
 
 		// Handle realtime notifications
 		if ( 'plugin-install' === $screen->id ) {
