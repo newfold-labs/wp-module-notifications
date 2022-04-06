@@ -111,7 +111,7 @@ const Notifications = (props) => {
      * @returns Array of filtered notifications - removes unmatched pages
      */
     const filterByLocationPages = (notifications) => {
-        console.log('Filtering by location pages. Matching page:' + props.page );
+        // console.log('Filtering by location pages. Matching page:' + props.page );
         return props.filter(notifications, 
             (notification) => {
                 var isPageMatch = false;
@@ -133,6 +133,17 @@ const Notifications = (props) => {
         );
     }
 
+    const removeNotification = (id) => {
+        setAllNotifications(
+            props.filter(allNotifications,
+                (notification) => {
+                    // console.log('Removing notification with id:',id);
+                    return notification.id !== id;
+                }
+            )
+        );
+    }
+
     return (
         <div className={props.classnames('newfold-notifications-wrapper')}>
             {activeMotifications.map(notification => (
@@ -141,6 +152,7 @@ const Notifications = (props) => {
                     content={notification.content}
                     resturl={props.resturl}
                     apiFetch={props.apiFetch}
+                    removeNotification={removeNotification}
                 />
             ))}
         </div>
@@ -162,8 +174,7 @@ const Notification = ({ id, content, ...props }) => {
                 url: `${props.resturl}/newfold-notifications/v1/notifications/${id}`,
                 method: 'DELETE'
             }).then( ( response ) => {
-                noticeContainer.remove();
-                console.log(response);
+                props.removeNotification(response.id);
             });
         }
     }
@@ -275,10 +286,10 @@ const Notification = ({ id, content, ...props }) => {
 
     return (
         <div 
-        id={'notification-' + id }
-        data-id={id}
-        className='newfold-notification'
-        dangerouslySetInnerHTML={ {__html: content} }
+            id={`notification-${id}`}
+            data-id={id}
+            className='newfold-notification'
+            dangerouslySetInnerHTML={ {__html: content} }
         />
     );
 };
