@@ -46,6 +46,8 @@ A module for managing Newfold in-site notifications.
     - [ ] Realtime notices on the plugins page
     - [x] Notices within our plugin-specific React app
 - [ ] Clean up terminology to make it consistent - notification vs notice
+- [ ] Set up webpack alias in plugin so we don't need to reference such a long path for importing component
+- [ ] Set up hiive brand relationship so bluehost notifications don't display in other brands plugins etc.
 
 Note: The `NotificationsApi.php` file around line #45 has some commented out test code which will let you mock a
 notification for testing.
