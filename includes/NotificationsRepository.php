@@ -4,7 +4,7 @@ namespace NewFoldLabs\WP\Module\Notifications;
 
 use NewfoldLabs\WP\Module\Data\HiiveConnection;
 use WP_Forge\Helpers\Arr;
-use wpscholar\Collection;
+use WP_Forge\Collection\Collection;
 
 use function NewfoldLabs\WP\ModuleLoader\container;
 
@@ -35,7 +35,7 @@ class NotificationsRepository {
 		$notifications = get_transient( self::TRANSIENT );
 		
 		// load test data TODO REMOVE
-		$notifications = self::get_test_notification_data(); 
+		// $notifications = self::get_test_notification_data(); 
 
 		if ( false === $notifications && true === $fetch_notices ) {
 			$response = wp_remote_get(
