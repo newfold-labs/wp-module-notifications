@@ -5,7 +5,7 @@
  * @param {*} props 
  * @returns 
  */
-const Notification = ({ id, content, ...props }) => {
+const Notification = ({ id, content, methods, constants, ...props }) => {
 
     const onClose = ( event ) => {
         event.preventDefault();
@@ -15,11 +15,11 @@ const Notification = ({ id, content, ...props }) => {
 
         const noticeContainer = document.querySelector('[data-id="' + id +'"]');
         if ( noticeContainer ) {
-            props.apiFetch( {
-                url: `${props.resturl}/newfold-notifications/v1/notifications/${id}`,
+            methods.apiFetch( {
+                url: `${constants.resturl}/newfold-notifications/v1/notifications/${id}`,
                 method: 'DELETE'
             }).then( ( response ) => {
-                props.removeNotification(response.id);
+                methods.removeNotification(response.id);
             });
         }
     }
@@ -32,8 +32,8 @@ const Notification = ({ id, content, ...props }) => {
     const sendEvent = (event)  => {
         event.data = event.data || {};
         event.data.page = window.location.href;
-        props.apiFetch({
-            path: `${props.resturl}/newfold-data/v1/events/`,
+        methods.apiFetch({
+            path: `${constants.resturl}/newfold-data/v1/events/`,
             method: 'POST', 
             data: event
         });
@@ -68,7 +68,7 @@ const Notification = ({ id, content, ...props }) => {
         })
     }
 
-    props.useEffect(() => {
+    methods.useEffect(() => {
         const noticeContainer   = document.querySelector('[data-id="' + id +'"]');
         const noticeCloser      = noticeContainer.querySelector('[data-action="close"]');
         const noticeButtons     = Array.from(noticeContainer.querySelectorAll('button'));

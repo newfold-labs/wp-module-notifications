@@ -23,25 +23,25 @@ import { default as Notification } from '../notification/';
  * @param {*} props 
  * @returns 
  */
-const Notifications = (props) => {
-	const [ activeMotifications, setActiveNotifications ] = props.useState( [] );
-    const [ allNotifications, setAllNotifications ] = props.useState( [] );
+const Notifications = ({methods, constants, ...props}) => {
+	const [ activeMotifications, setActiveNotifications ] = methods.useState( [] );
+    const [ allNotifications, setAllNotifications ] = methods.useState( [] );
     
     // on mount load all notifications from module api
-    props.useEffect(() => {
-        props.apiFetch( {
-            url: `${props.resturl}/newfold-notifications/v1/notifications&context=${props.context}`
+    methods.useEffect(() => {
+        methods.apiFetch( {
+            url: `${constants.resturl}/newfold-notifications/v1/notifications&context=${constants.context}`
         }).then( ( response ) => {
             setAllNotifications(response);
 		});
 	}, [] );
 
     // on update notifications, context or page calculate active notifications
-    props.useEffect(() => {
+    methods.useEffect(() => {
         setActiveNotifications(
             filterNotifications(allNotifications)
         );
-	}, [allNotifications, props.page]);
+	}, [allNotifications, constants.page]);
 
     /**
      * Wrapper method to filter notifications
@@ -72,7 +72,7 @@ const Notifications = (props) => {
         const now = Date.now();
         // console.log( 'Now: ' + now );
         // filter out expired notifications
-        return props.filter(notifications, 
+        return methods.filter(notifications, 
             (notification) => { 
                 // console.log( notification.expiration > now ? 
                 //     notification.id + ' is not yet expired. Still ' + ( notification.expiration - now ) + 'ms' :
@@ -89,16 +89,16 @@ const Notifications = (props) => {
      * @returns Array of filtered notifications - removes unmatched contexts
      */
     const filterByLocationContext = (notifications) => {
-        // console.log('Filtering by location context. Matching context:' + props.context );
-        return props.filter(notifications, 
+        // console.log('Filtering by location context. Matching context:' + constants.context );
+        return methods.filter(notifications, 
             (notification) => {
-                // console.log( notification.locations[0].context === props.context ?
-                //     props.context + ': context match' :
-                //     props.context + ': not matching context'
+                // console.log( notification.locations[0].context === constants.context ?
+                //     constants.context + ': context match' :
+                //     constants.context + ': not matching context'
                 // );
                 var isContextMatch = false;
                 notification.locations.forEach(location => {
-                    if ( location.context === props.context ) {
+                    if ( location.context === constants.context ) {
                         isContextMatch = true;
                     }
                 });
@@ -113,20 +113,20 @@ const Notifications = (props) => {
      * @returns Array of filtered notifications - removes unmatched pages
      */
     const filterByLocationPages = (notifications) => {
-        // console.log('Filtering by location pages. Matching page:' + props.page );
-        return props.filter(notifications, 
+        // console.log('Filtering by location pages. Matching page:' + constants.page );
+        return methods.filter(notifications, 
             (notification) => {
                 var isPageMatch = false;
                 notification.locations.forEach(location => {
                     // pages is string
                     if ( typeof location.pages === 'string' ) {
                         // pages matches current page or is `all`
-                        if ( location.pages === props.page || location.pages === 'all' ) {
+                        if ( location.pages === constants.page || location.pages === 'all' ) {
                             isPageMatch = true;
                         }
                     }
                     // pages is array and contains current page
-                    if ( Array.isArray(location.pages) && location.pages.includes( props.page ) ) {
+                    if ( Array.isArray(location.pages) && location.pages.includes( constants.page ) ) {
                         isPageMatch = true;
                     }
                 });
@@ -135,9 +135,9 @@ const Notifications = (props) => {
         );
     }
 
-    const removeNotification = (id) => {
+    methods.removeNotification = (id) => {
         setAllNotifications(
-            props.filter(allNotifications,
+            methods.filter(allNotifications,
                 (notification) => {
                     // console.log('Removing notification with id:',id);
                     return notification.id !== id;
@@ -147,15 +147,13 @@ const Notifications = (props) => {
     }
 
     return (
-        <div className={props.classnames('newfold-notifications-wrapper')}>
+        <div className={methods.classnames('newfold-notifications-wrapper')}>
             {activeMotifications.map(notification => (
                 <Notification 
                     id={notification.id} 
                     content={notification.content}
-                    resturl={props.resturl}
-                    apiFetch={props.apiFetch}
-                    useEffect={props.useEffect}
-                    removeNotification={removeNotification}
+                    constants={constants}
+                    methods={methods}
                 />
             ))}
         </div>
