@@ -1,5 +1,7 @@
+import { default as Notification } from '../notification/';
+
 /**
- * Notifications Module
+ * Notifications Component
  * For use in brand app to display notifications
  * 
  * Notification shape:
@@ -21,25 +23,25 @@
  * @param {*} props 
  * @returns 
  */
-const Notifications = (props) => {
-	const [ activeMotifications, setActiveNotifications ] = props.useState( [] );
-    const [ allNotifications, setAllNotifications ] = props.useState( [] );
+const Notifications = ({methods, constants, ...props}) => {
+	const [ activeMotifications, setActiveNotifications ] = methods.useState( [] );
+    const [ allNotifications, setAllNotifications ] = methods.useState( [] );
     
     // on mount load all notifications from module api
-    useEffect(() => {
-        props.apiFetch( {
-            url: `${props.resturl}/newfold-notifications/v1/notifications&context=${props.context}`
+    methods.useEffect(() => {
+        methods.apiFetch( {
+            url: `${constants.resturl}/newfold-notifications/v1/notifications&context=${constants.context}`
         }).then( ( response ) => {
             setAllNotifications(response);
 		});
 	}, [] );
 
     // on update notifications, context or page calculate active notifications
-    useEffect(() => {
+    methods.useEffect(() => {
         setActiveNotifications(
             filterNotifications(allNotifications)
         );
-	}, [allNotifications, props.page]);
+	}, [allNotifications, constants.page]);
 
     /**
      * Wrapper method to filter notifications
@@ -70,7 +72,7 @@ const Notifications = (props) => {
         const now = Date.now();
         // console.log( 'Now: ' + now );
         // filter out expired notifications
-        return props.filter(notifications, 
+        return methods.filter(notifications, 
             (notification) => { 
                 // console.log( notification.expiration > now ? 
                 //     notification.id + ' is not yet expired. Still ' + ( notification.expiration - now ) + 'ms' :
@@ -87,16 +89,16 @@ const Notifications = (props) => {
      * @returns Array of filtered notifications - removes unmatched contexts
      */
     const filterByLocationContext = (notifications) => {
-        // console.log('Filtering by location context. Matching context:' + props.context );
-        return props.filter(notifications, 
+        // console.log('Filtering by location context. Matching context:' + constants.context );
+        return methods.filter(notifications, 
             (notification) => {
-                // console.log( notification.locations[0].context === props.context ?
-                //     props.context + ': context match' :
-                //     props.context + ': not matching context'
+                // console.log( notification.locations[0].context === constants.context ?
+                //     constants.context + ': context match' :
+                //     constants.context + ': not matching context'
                 // );
                 var isContextMatch = false;
                 notification.locations.forEach(location => {
-                    if ( location.context === props.context ) {
+                    if ( location.context === constants.context ) {
                         isContextMatch = true;
                     }
                 });
@@ -111,20 +113,20 @@ const Notifications = (props) => {
      * @returns Array of filtered notifications - removes unmatched pages
      */
     const filterByLocationPages = (notifications) => {
-        // console.log('Filtering by location pages. Matching page:' + props.page );
-        return props.filter(notifications, 
+        // console.log('Filtering by location pages. Matching page:' + constants.page );
+        return methods.filter(notifications, 
             (notification) => {
                 var isPageMatch = false;
                 notification.locations.forEach(location => {
                     // pages is string
                     if ( typeof location.pages === 'string' ) {
                         // pages matches current page or is `all`
-                        if ( location.pages === props.page || location.pages === 'all' ) {
+                        if ( location.pages === constants.page || location.pages === 'all' ) {
                             isPageMatch = true;
                         }
                     }
                     // pages is array and contains current page
-                    if ( Array.isArray(location.pages) && location.pages.includes( props.page ) ) {
+                    if ( Array.isArray(location.pages) && location.pages.includes( constants.page ) ) {
                         isPageMatch = true;
                     }
                 });
@@ -133,9 +135,9 @@ const Notifications = (props) => {
         );
     }
 
-    const removeNotification = (id) => {
+    methods.removeNotification = (id) => {
         setAllNotifications(
-            props.filter(allNotifications,
+            methods.filter(allNotifications,
                 (notification) => {
                     // console.log('Removing notification with id:',id);
                     return notification.id !== id;
@@ -145,153 +147,18 @@ const Notifications = (props) => {
     }
 
     return (
-        <div className={props.classnames('newfold-notifications-wrapper')}>
+        <div className={methods.classnames('newfold-notifications-wrapper')}>
             {activeMotifications.map(notification => (
                 <Notification 
                     id={notification.id} 
                     content={notification.content}
-                    resturl={props.resturl}
-                    apiFetch={props.apiFetch}
-                    removeNotification={removeNotification}
+                    constants={constants}
+                    methods={methods}
                 />
             ))}
         </div>
     )
 
-};
-
-const Notification = ({ id, content, ...props }) => {
-
-    const onClose = ( event ) => {
-        event.preventDefault();
-        if ( event.keycode && ENTER !== event.keycode ) {
-			return;
-		}
-
-        const noticeContainer = document.querySelector('[data-id="' + id +'"]');
-        if ( noticeContainer ) {
-            props.apiFetch( {
-                url: `${props.resturl}/newfold-notifications/v1/notifications/${id}`,
-                method: 'DELETE'
-            }).then( ( response ) => {
-                props.removeNotification(response.id);
-            });
-        }
-    }
-
-    /**
-     * Send events to the WP REST API
-     *
-     * @param {Object} event The event data to be tracked.
-     */
-    const sendEvent = (event)  => {
-        event.data = event.data || {};
-        event.data.page = window.location.href;
-        props.apiFetch({
-            path: `${props.resturl}/newfold-data/v1/events/`,
-            method: 'POST', 
-            data: event
-        });
-    }
-
-    const onButtonNavigate = ( event ) => {
-        if ( event.keycode && ENTER !== event.keycode ) {
-			return;
-		}
-        sendEvent({
-            action: 'newfold-notification-click',
-            data: {
-                element: 'button',
-                label: event.target.innerText,
-                notificationId: id,
-            }
-        })
-    }
-
-    const onAnchorNavigate = ( event ) => {
-        if ( event.keycode && ENTER !== event.keycode ) {
-			return;
-		}
-        sendEvent({
-            action: 'newfold-notification-click',
-            data: {
-                element: 'a',
-                href: event.target.getAttribute('href'),
-                label: event.target.innerText,
-                notificationId: id,
-            }
-        })
-    }
-
-    useEffect(() => {
-        const noticeContainer   = document.querySelector('[data-id="' + id +'"]');
-        const noticeCloser      = noticeContainer.querySelector('[data-action="close"]');
-        const noticeButtons     = Array.from(noticeContainer.querySelectorAll('button'));
-        const noticeAnchors     = Array.from(noticeContainer.querySelectorAll('a'));
-
-        if (noticeButtons.length) {
-            noticeButtons.forEach(
-                button => {
-                    if (button.getAttribute('data-action') !== 'close') {
-                        button.addEventListener('click', onButtonNavigate);
-                        button.addEventListener('onkeydown', onButtonNavigate);
-                    }
-                }
-            )
-        }
-
-        if (noticeAnchors.length) {
-            noticeAnchors.forEach(
-                link => {
-                    if (link.getAttribute('data-action') !== 'close') {
-                        link.addEventListener('click', onAnchorNavigate);
-                        link.addEventListener('onkeydown', onAnchorNavigate);
-                    }
-                }
-            )
-        }
-
-        if (noticeCloser) {
-            noticeCloser.addEventListener('click', onClose);
-            noticeCloser.addEventListener('onkeydown', onClose);
-        }
-        
-        return () => {
-            if (noticeButtons.length) {
-                noticeButtons.forEach(
-					button => {
-						if (button.getAttribute('data-action') !== 'close') {
-                            button.removeEventListener('click', onButtonNavigate);
-                            button.removeEventListener('onkeydown', onButtonNavigate);
-						}
-					}
-				)
-            }
-            if (noticeAnchors.length) {
-				noticeAnchors.forEach(
-					link => {
-						if (link.getAttribute('data-action') !== 'close') {
-                            link.removeEventListener('click', onAnchorNavigate);
-                            link.removeEventListener('onkeydown', onAnchorNavigate);
-						}
-					}
-				)
-            }
-            if (noticeCloser) {
-                noticeCloser.removeEventListener('click', onClose);
-                noticeCloser.removeEventListener('onkeydown', onClose);
-            }
-        }
-    }, [id]);
-
-    return (
-        <div 
-            id={`notification-${id}`}
-            data-id={id}
-            className='newfold-notification'
-            dangerouslySetInnerHTML={ {__html: content} }
-        />
-    );
 };
 
 export default Notifications;
