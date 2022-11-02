@@ -26,7 +26,7 @@ const Notifications = (props) => {
     const [ allNotifications, setAllNotifications ] = props.useState( [] );
     
     // on mount load all notifications from module api
-    useEffect(() => {
+    props.useEffect(() => {
         props.apiFetch( {
             url: `${props.resturl}/newfold-notifications/v1/notifications&context=${props.context}`
         }).then( ( response ) => {
@@ -35,7 +35,7 @@ const Notifications = (props) => {
 	}, [] );
 
     // on update notifications, context or page calculate active notifications
-    useEffect(() => {
+    props.useEffect(() => {
         setActiveNotifications(
             filterNotifications(allNotifications)
         );
@@ -152,6 +152,7 @@ const Notifications = (props) => {
                     content={notification.content}
                     resturl={props.resturl}
                     apiFetch={props.apiFetch}
+                    useEffect={props.useEffect}
                     removeNotification={removeNotification}
                 />
             ))}
@@ -223,7 +224,7 @@ const Notification = ({ id, content, ...props }) => {
         })
     }
 
-    useEffect(() => {
+    props.useEffect(() => {
         const noticeContainer   = document.querySelector('[data-id="' + id +'"]');
         const noticeCloser      = noticeContainer.querySelector('[data-action="close"]');
         const noticeButtons     = Array.from(noticeContainer.querySelectorAll('button'));
