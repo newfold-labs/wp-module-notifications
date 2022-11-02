@@ -1,3 +1,5 @@
+import { default as Notification } from '../notification/';
+
 /**
  * Notifications Module
  * For use in brand app to display notifications
