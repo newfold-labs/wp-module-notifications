@@ -7,7 +7,7 @@
 			const id = notice.getAttribute('data-id');
 			notice.parentNode.removeChild(notice);
 			window.fetch(
-				`${ window.newfoldNotices.restApiUrl }newfold-notificaitions/v1/notifications/${ id }`,
+				`${ window.newfoldNotices.restApiUrl }newfold-notifications/v1/notifications/${ id }`,
 				{
 					credentials: 'same-origin',
 					method: 'DELETE',
