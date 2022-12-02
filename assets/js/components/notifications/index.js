@@ -24,7 +24,7 @@ import { default as Notification } from '../notification/';
  * @returns 
  */
 const Notifications = ({methods, constants, ...props}) => {
-	const [ activeMotifications, setActiveNotifications ] = methods.useState( [] );
+	const [ activeNotifications, setActiveNotifications ] = methods.useState( [] );
     const [ allNotifications, setAllNotifications ] = methods.useState( [] );
     
     // on mount load all notifications from module api
@@ -148,7 +148,7 @@ const Notifications = ({methods, constants, ...props}) => {
 
     return (
         <div className={methods.classnames('newfold-notifications-wrapper')}>
-            {activeMotifications.map(notification => (
+            {activeNotifications.map(notification => (
                 <Notification 
                     id={notification.id} 
                     content={notification.content}
