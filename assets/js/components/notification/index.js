@@ -15,6 +15,7 @@ const Notification = ({ id, content, methods, constants, ...props }) => {
 
         const noticeContainer = document.querySelector('[data-id="' + id +'"]');
         if ( noticeContainer ) {
+            noticeContainer.classList.add('is-dismissed');
             methods.apiFetch( {
                 url: `${constants.resturl}/newfold-notifications/v1/notifications/${id}`,
                 method: 'DELETE'
