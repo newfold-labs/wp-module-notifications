@@ -100,7 +100,7 @@ class NotificationsRepository {
 					'pages'   => '#/help',
 				]
 			],
-			'expiration' => 1649860279240,
+			'expiration' => 1749860279240,
 			'content'    => '<div class="notice notice-warning"><p>Here is a plugin notice it should display on home and help screen only! <a data-action="close">x</a></p></div>',
 		];
 		$results[] = [
@@ -141,7 +141,7 @@ class NotificationsRepository {
 			'locations' => [
 				[
 					'pages' => ["#/marketplace/services"],
-					'context' => "web-plugin"
+					'context' => container()->plugin()->id . "-plugin"
 				],
 				[
 					'pages' => 'index.php',
