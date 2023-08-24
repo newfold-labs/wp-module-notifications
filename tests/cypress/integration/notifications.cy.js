@@ -42,7 +42,7 @@ describe('Notifications', () => {
 			.should('not.exist');
 
 		// cy.visit('/wp-admin/admin.php?page=' + Cypress.env('pluginId') + '#/settings');
-		cy.get('.wppbh-app-navitem-Settings').click();
+		cy.get('.' + Cypress.env('appId') + '-app-navitem-Settings').click();
 		cy.wait(500);
 
         cy.get('.newfold-notifications-wrapper #notification-test-1')
