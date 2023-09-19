@@ -74,10 +74,10 @@ describe('Notifications', () => {
 		cy.intercept({
 			method: 'GET',
 			url: '**newfold-notifications**'
-		}, notifications ).as('notifications');
+		}, notifications );
 
 		cy.visit('/wp-admin/admin.php?page=' + Cypress.env('pluginId') + '#/home', {timeout: 30000});
-		cy.wait('@notifications');
+
 	});
 
 	it('Is Accessible', () => {
@@ -129,12 +129,13 @@ describe('Notifications', () => {
 
     // dismiss events triggered
 	it('Dismissing notification removes it from the page', () => {
+
 		cy.intercept({
-			method: 'DELETE',
-			url: /newfold-notifications(\/|%2F)v1(\/|%2F)notifications/
+			method: 'POST',
+			url: '**newfold-notifications**',
 		}, {
-			body: {"id":"test-2"}
-		}).as('notificationDismiss');
+            body: {"id":"test-2"}
+        } ).as('dismissNotificaiton');
 
 		cy.visit('/wp-admin/admin.php?page=' + Cypress.env('pluginId') + '#/home');
 
@@ -151,8 +152,8 @@ describe('Notifications', () => {
 		
 
 		cy.get('#notification-test-2 button.notice-dismiss[data-action="close"]').click();		
-		// cy.wait('@notificationDismiss');
-		cy.wait(2000);
+        cy.wait('@dismissNotificaiton');
+        
 		cy.get('.newfold-notifications-wrapper #notification-test-2')
 			.should('not.exist');
 		
