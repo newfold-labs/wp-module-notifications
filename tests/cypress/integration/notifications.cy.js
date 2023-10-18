@@ -163,8 +163,7 @@ describe('Notifications', () => {
 	// so we can't intercept with test notifications
 	it('Container Exists in wp-admin', () => {
 		cy.visit('/wp-admin/index.php');
-		cy.wait(1000);
-        cy.get('.newfold-notifications-wrapper').should('have.length', 1);
+        cy.get('#newfold-notifications').should('exist');
 	});
 
     // click events triggered
