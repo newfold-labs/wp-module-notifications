@@ -65,7 +65,7 @@ class AdminNotices {
 	 * Open the notifactions container
 	 */
 	public static function openContainer() {
-		echo wp_kses_post( '<div id="newfold-notificatons" class="newfold-notifications-wrapper">' );
+		echo wp_kses_post( '<div id="newfold-notifications" class="newfold-notifications-wrapper">' );
 	}
 
 	/**
