@@ -73,7 +73,7 @@ describe('Notifications', () => {
 
 		cy.intercept({
 			method: 'GET',
-			url: '**newfold-notifications**'
+			url:  /newfold-notifications(\/|%2F)v1(\/|%2F)notifications/
 		}, notifications );
 
 		cy.visit('/wp-admin/admin.php?page=' + Cypress.env('pluginId') + '#/home', {timeout: 30000});
@@ -132,7 +132,7 @@ describe('Notifications', () => {
 
 		cy.intercept({
 			method: 'POST',
-			url: '**newfold-notifications**',
+			url: /newfold-notifications(\/|%2F)v1(\/|%2F)notifications/,
 		}, {
             body: {"id":"test-2"}
         } ).as('dismissNotificaiton');
