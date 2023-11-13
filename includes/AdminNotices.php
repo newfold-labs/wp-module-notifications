@@ -87,17 +87,9 @@ class AdminNotices {
 			wp_enqueue_script(
 				'newfold-plugin-realtime-notices',
 				plugins_url( 'vendor/newfold-labs/wp-module-notifications/assets/js/realtime-notices.js', container()->plugin()->file ),
-				array( 'lodash' ),
+				array( 'lodash', 'nfd-runtime' ),
 				container()->plugin()->version,
 				true
-			);
-			wp_localize_script(
-				'newfold-plugin-realtime-notices',
-				'newfoldRealtimeNotices',
-				array(
-					'restApiUrl'   => esc_url_raw( rest_url() ),
-					'restApiNonce' => wp_create_nonce( 'wp_rest' ),
-				)
 			);
 		}
 
@@ -105,17 +97,9 @@ class AdminNotices {
 		wp_enqueue_script(
 			'newfold-dismiss-notices',
 			plugins_url( 'vendor/newfold-labs/wp-module-notifications/assets/js/dismiss-notices.js', container()->plugin()->file ),
-			array(),
+			array( 'nfd-runtime' ),
 			container()->plugin()->version,
 			true
-		);
-		wp_localize_script(
-			'newfold-dismiss-notices',
-			'newfoldNotices',
-			array(
-				'restApiUrl'   => esc_url_raw( rest_url() ),
-				'restApiNonce' => wp_create_nonce( 'wp_rest' ),
-			)
 		);
 	}
 

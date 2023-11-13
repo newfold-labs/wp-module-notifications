@@ -106,13 +106,13 @@
 			e.preventDefault();
 			this.removeElement();
 			window.fetch(
-				`${ window.newfoldRealtimeNotices.restApiUrl }newfold-notifications/v1/notifications/${ this.id }`,
+				`${ window.NewfoldRuntime.restUrl }newfold-notifications/v1/notifications/${ this.id }`,
 				{
 					credentials: 'same-origin',
 					method: 'DELETE',
 					headers: {
 						'Content-Type': 'application/json',
-						'X-WP-Nonce': window.newfoldRealtimeNotices.restApiNonce,
+						'X-WP-Nonce': window.NewfoldRuntime.restNonce,
 					},
 				}
 			);
@@ -132,13 +132,13 @@
 				data.href = e.target.getAttribute('href');
 			}
 			window.fetch(
-				`${ window.newfoldRealtimeNotices.restApiUrl }newfold-data/v1/events/`,
+				`${ window.NewfoldRuntime.restUrl }newfold-data/v1/events/`,
 				{
 					credentials: 'same-origin',
 					method: 'POST',
 					headers: {
 						'Content-Type': 'application/json',
-						'X-WP-Nonce': window.newfoldRealtimeNotices.restApiNonce,
+						'X-WP-Nonce': window.NewfoldRuntime.restNonce,
 					},
 					body: JSON.stringify(data),
 				}
@@ -190,13 +190,13 @@
 			event.queue = false;
 			window
 				.fetch(
-					`${ window.newfoldRealtimeNotices.restApiUrl }newfold-notifications/v1/notifications/events`,
+					`${ window.NewfoldRuntime.restUrl }newfold-notifications/v1/notifications/events`,
 					{
 						credentials: 'same-origin',
 						method: 'POST',
 						headers: {
 							'Content-Type': 'application/json',
-							'X-WP-Nonce': window.newfoldRealtimeNotices.restApiNonce,
+							'X-WP-Nonce': window.NewfoldRuntime.restNonce,
 						},
 						body: JSON.stringify(event),
 					}

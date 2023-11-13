@@ -60,7 +60,7 @@ class NotificationsRepository {
 			wp_enqueue_script(
 				'newfold-notices-primer',
 				plugins_url( 'vendor/newfold-labs/wp-module-notifications/assets/js/prime-notices.js', container()->plugin()->file ),
-				array( 'wp-dom-ready', 'wp-api-fetch' ),
+				array( 'wp-dom-ready', 'wp-api-fetch', 'nfd-runtime' ),
 				container()->plugin()->version,
 				true
 			);

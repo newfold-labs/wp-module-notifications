@@ -17,7 +17,7 @@ const Notification = ({ id, content, methods, constants, ...props }) => {
         if ( noticeContainer ) {
             noticeContainer.classList.add('is-dismissed');
             methods.apiFetch( {
-                url: `${constants.resturl}/newfold-notifications/v1/notifications/${id}`,
+                url: `${window.NewfoldRuntime.restUrl}newfold-notifications/v1/notifications/${id}`,
                 method: 'DELETE'
             }).then( ( response ) => {
                 methods.removeNotification(response.id);
@@ -34,7 +34,7 @@ const Notification = ({ id, content, methods, constants, ...props }) => {
         event.data = event.data || {};
         event.data.page = window.location.href;
         methods.apiFetch({
-            path: `${constants.resturl}/newfold-data/v1/events/`,
+            path: `${window.NewfoldRuntime.restUrl}newfold-data/v1/events/`,
             method: 'POST', 
             data: event
         });
