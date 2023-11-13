@@ -30,7 +30,10 @@ const Notifications = ({methods, constants, ...props}) => {
     // on mount load all notifications from module api
     methods.useEffect(() => {
         methods.apiFetch( {
-            url: `${constants.resturl}/newfold-notifications/v1/notifications&context=${constants.context}`
+            url: methods.addQueryArgs( 
+                `${window.NewfoldRuntime.restUrl}newfold-notifications/v1/notifications`, 
+                { context: constants.context }
+            )
         }).then( ( response ) => {
             setAllNotifications(response);
 		});
