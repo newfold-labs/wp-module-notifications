@@ -87,7 +87,7 @@ class AdminNotices {
 			wp_enqueue_script(
 				'newfold-plugin-realtime-notices',
 				plugins_url( 'vendor/newfold-labs/wp-module-notifications/assets/js/realtime-notices.js', container()->plugin()->file ),
-				array( 'lodash' ),
+				array( 'lodash', 'nfd-runtime' ),
 				container()->plugin()->version,
 				true
 			);
@@ -105,7 +105,7 @@ class AdminNotices {
 		wp_enqueue_script(
 			'newfold-dismiss-notices',
 			plugins_url( 'vendor/newfold-labs/wp-module-notifications/assets/js/dismiss-notices.js', container()->plugin()->file ),
-			array(),
+			array( 'nfd-runtime' ),
 			container()->plugin()->version,
 			true
 		);
