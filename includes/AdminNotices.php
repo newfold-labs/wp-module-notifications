@@ -91,14 +91,6 @@ class AdminNotices {
 				container()->plugin()->version,
 				true
 			);
-			wp_localize_script(
-				'newfold-plugin-realtime-notices',
-				'newfoldRealtimeNotices',
-				array(
-					'restApiUrl'   => esc_url_raw( rest_url() ),
-					'restApiNonce' => wp_create_nonce( 'wp_rest' ),
-				)
-			);
 		}
 
 		// Enqueue and set local values for dismiss script
@@ -108,14 +100,6 @@ class AdminNotices {
 			array( 'nfd-runtime' ),
 			container()->plugin()->version,
 			true
-		);
-		wp_localize_script(
-			'newfold-dismiss-notices',
-			'newfoldNotices',
-			array(
-				'restApiUrl'   => esc_url_raw( rest_url() ),
-				'restApiNonce' => wp_create_nonce( 'wp_rest' ),
-			)
 		);
 	}
 

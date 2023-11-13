@@ -7,13 +7,13 @@
 			const id = notice.getAttribute('data-id');
 			notice.parentNode.removeChild(notice);
 			window.fetch(
-				`${ window.newfoldNotices.restApiUrl }newfold-notifications/v1/notifications/${ id }`,
+				`${ window.NewfoldRuntime.restUrl }newfold-notifications/v1/notifications/${ id }`,
 				{
 					credentials: 'same-origin',
 					method: 'DELETE',
 					headers: {
 						'Content-Type': 'application/json',
-						'X-WP-Nonce': window.newfoldNotices.restApiNonce,
+						'X-WP-Nonce': window.NewfoldRuntime.restNonce,
 					},
 				}
 			);
@@ -36,13 +36,13 @@
 				data.href = e.target.getAttribute('href');
 			}
 			window.fetch(
-				`${ window.newfoldNotices.restApiUrl }newfold-data/v1/events/`,
+				`${ window.NewfoldRuntime.restUrl }newfold-data/v1/events/`,
 				{
 					credentials: 'same-origin',
 					method: 'POST',
 					headers: {
 						'Content-Type': 'application/json',
-						'X-WP-Nonce': window.newfoldNotices.restApiNonce,
+						'X-WP-Nonce': window.NewfoldRuntime.restNonce,
 					},
 					body: JSON.stringify(data),
 				}
