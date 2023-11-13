@@ -154,6 +154,7 @@ const Notifications = ({methods, constants, ...props}) => {
             {activeNotifications.map(notification => (
                 <Notification 
                     id={notification.id} 
+                    key={notification.id}
                     content={notification.content}
                     constants={constants}
                     methods={methods}
