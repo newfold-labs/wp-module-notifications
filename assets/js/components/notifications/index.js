@@ -1,3 +1,4 @@
+import { addQueryArgs } from '@wordpress/url';
 import { default as Notification } from '../notification/';
 
 /**
@@ -30,7 +31,7 @@ const Notifications = ({methods, constants, ...props}) => {
     // on mount load all notifications from module api
     methods.useEffect(() => {
         methods.apiFetch( {
-            url: methods.addQueryArgs( 
+            url: addQueryArgs(
                 `${window.NewfoldRuntime.restUrl}newfold-notifications/v1/notifications`, 
                 { context: constants.context }
             )
