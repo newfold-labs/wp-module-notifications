@@ -22,6 +22,11 @@ class AdminNotices {
 			return;
 		}
 
+        // Bail if we're on a post or page list view in the admin
+		if ( $screen->base === 'edit' ) {
+            return;
+		}
+
 		// Handle realtime notifications
 		if ( 'plugin-install' === $screen->id ) {
 			?>
