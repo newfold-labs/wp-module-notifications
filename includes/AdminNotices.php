@@ -22,21 +22,26 @@ class AdminNotices {
 			return;
 		}
 
+        // Bail if we're on a post or page list view in the admin
+		if ( $screen->base === 'edit' ) {
+            return;
+		}
+
 		// Handle realtime notifications
 		if ( 'plugin-install' === $screen->id ) {
 			?>
-			<style>
-				.newfold-realtime-notice {
-					margin: 5px 0 15px 0;
-				}
-			</style>
+            <style>
+                .newfold-realtime-notice {
+                    margin: 5px 0 15px 0;
+                }
+            </style>
 			<?php
 		}
 
 		$page          = str_replace( admin_url(), '', Url::getCurrentUrl() );
 		$notifications = new NotificationsRepository( false );
 		$collection    = $notifications->collection();
-		
+
 		// Constant container for admin notices
 		self::openContainer();
 
@@ -45,9 +50,9 @@ class AdminNotices {
 				function ( Notification $notification ) use ( $page ) {
 					if ( $notification->shouldShow( 'wp-admin-notice', array( 'page' => $page ) ) ) {
 						?>
-						<div class="newfold-notice" data-id="<?php echo esc_attr( $notification->id ); ?>">
+                        <div class="newfold-notice" data-id="<?php echo esc_attr( $notification->id ); ?>">
 							<?php echo $notification->content; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
-						</div>
+                        </div>
 						<?php
 					}
 				}
@@ -55,7 +60,7 @@ class AdminNotices {
 		}
 
 		self::closeContainer();
-		
+
 		self::adminScripts();
 
 	}
@@ -78,8 +83,8 @@ class AdminNotices {
 	/**
 	 * Handle scripts
 	 */
-	public static function adminScripts(){
-		
+	public static function adminScripts() {
+
 		// Handle realtime notifications
 		$screen = get_current_screen();
 		if ( 'plugin-install' === $screen->id ) {
