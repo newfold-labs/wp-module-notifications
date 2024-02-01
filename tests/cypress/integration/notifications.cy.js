@@ -76,7 +76,7 @@ describe( 'Notifications', () => {
 				url: /newfold-notifications(\/|%2F)v1(\/|%2F)notifications/,
 			},
 			notifications
-		);
+		).as('notifications');
 
 		cy.visit(
 			'/wp-admin/admin.php?page=' + Cypress.env( 'pluginId' ) + '#/home',
