@@ -70,13 +70,14 @@ describe( 'Notifications', () => {
 	const appClass = '.' + Cypress.env( 'appId' );
 
 	before( () => {
+		cy.exec( 'npx wp-env run cli wp transient delete newfold_notifications' );
 		cy.intercept(
 			{
 				method: 'GET',
 				url: /newfold-notifications(\/|%2F)v1(\/|%2F)notifications/,
 			},
 			notifications
-		);
+		).as( 'notifications' );
 
 		cy.visit(
 			'/wp-admin/admin.php?page=' + Cypress.env( 'pluginId' ) + '#/home',
