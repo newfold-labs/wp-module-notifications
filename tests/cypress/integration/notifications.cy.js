@@ -71,6 +71,7 @@ describe( 'Notifications', () => {
 
 	before( () => {
 		cy.exec( 'npx wp-env run cli wp transient delete newfold_notifications' );
+		cy.visit( '/wp-admin/index.php' );
 		cy.intercept(
 			{
 				method: 'GET',
@@ -83,6 +84,8 @@ describe( 'Notifications', () => {
 			'/wp-admin/admin.php?page=' + Cypress.env( 'pluginId' ) + '#/home',
 			{ timeout: 30000 }
 		);
+
+		cy.wait( '@notifications' );
 	} );
 
 	it( 'Is Accessible', () => {
