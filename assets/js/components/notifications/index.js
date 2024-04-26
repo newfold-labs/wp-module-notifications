@@ -150,7 +150,7 @@ const Notifications = ({methods, constants, ...props}) => {
         );
     }
 
-    if ('bluehost-app-nav' === constants.context && activeNotifications.length > 0) {
+    if (`${window.NewfoldRuntime.plugin.brand}-app-nav` === constants.context && activeNotifications.length > 0) {
         return (
             <div className={methods.classnames('newfold-nav-notifications-wrapper nfd-mt-4')}>
                 <Notification 
