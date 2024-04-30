@@ -52,6 +52,7 @@ class NotificationsApi {
 						'validate_callback' => function ( $value ) {
 							return is_string( $value ) && in_array( $value, array(
 									container()->plugin()->id . '-plugin',
+									container()->plugin()->id . '-app-nav',
 									'wp-admin-notice',
 									'wp-admin-prime'
 								), true );
@@ -61,7 +62,7 @@ class NotificationsApi {
 						'required'          => false,
 						'validate_callback' => function ( $value, \WP_REST_Request $request ) {
 							$context = $request->get_param( 'context' );
-							if ( container()->plugin()->id . '-plugin' === $context || 'wp-admin-notice' === $context ) {
+							if ( container()->plugin()->id . '-plugin' === $context || container()->plugin()->id . '-app-nav' === $context || 'wp-admin-notice' === $context ) {
 								return is_string( $value );
 							}
 

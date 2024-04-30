@@ -121,6 +121,7 @@ class Notification {
 					}
 
 				case container()->plugin()->id . '-plugin':
+				case container()->plugin()->id . '-app-nav':
 					// The current page
 					$current_page = Arr::get( $contextData, 'page' );
 
