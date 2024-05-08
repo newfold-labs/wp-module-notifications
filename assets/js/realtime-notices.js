@@ -147,9 +147,89 @@
 
 	}
 
+	class PluginSearchResult extends RealtimeNotice {
+
+		searchQuery = '';
+		storedQuery = '';
+
+		constructor({id, content, expiration, locations, query}, searchQuery) {
+			super({id, content, expiration, locations});
+			this.searchQuery = searchQuery;
+			this.storedQuery = query;
+		}
+
+		shouldShow() {
+
+			let shouldShow = false;
+
+			// Don't show if it already exists
+			if (document.querySelector('div.plugin-card.newfold-search-results[data-id="' + this.id + '"]') !== null) {
+				return shouldShow;
+			}
+
+			const queryTokens = this.searchQuery.split(" ");
+			
+			let isQueryMatch = false;
+			queryTokens.forEach(queryToken => {
+				if (this.storedQuery.toLowerCase().includes(queryToken.toLowerCase())) {
+					isQueryMatch = true;
+					return;
+				}
+			});
+
+			if (!isQueryMatch) {
+				return shouldShow;
+			}
+
+			// Check if notice has expired
+			if (this.expiration > Math.round(Date.now() / 1000)) {
+
+				// Check if any location has the proper context
+				this.locations.forEach(
+					({context, pages}) => {
+						if ('wp-plugin-search' === context) {
+							if (Array.isArray(pages) && pages.includes('plugin-install.php')) {
+								shouldShow = true;
+							}
+							if (pages === 'all') {
+								shouldShow = true;
+							}
+						}
+					}
+				);
+
+			}
+			return shouldShow;
+		}
+
+		createElement() {
+			const el = document.createElement('div');
+			el.setAttribute('class', 'plugin-card newfold-search-results');
+			el.setAttribute('data-id', this.id);
+			el.innerHTML = this.content;
+			this.el = el;
+			return el;
+		}
+
+		insertElement(el) {
+			const insertIntoList = () => {
+				const theList = document.querySelector('#the-list');
+				if (theList) {
+					clearInterval(interval);
+					theList.insertAdjacentElement('afterbegin', el);
+					this.addEventListeners(el);
+				}
+			};
+		
+			const interval = setInterval(insertIntoList, 100);
+		}
+
+	}
+
 	class PluginSearch {
 
 		inputHandler = _.debounce(this.onPluginSearch.bind(this), 1000);
+		searchQuery;
 
 		static init() {
 			const event = new PluginSearch();
@@ -177,12 +257,26 @@
 		onPluginSearch(e) {
 			const type = document.getElementById('typeselector').value;
 			const query = document.getElementById('search-plugins').value;
+			this.searchQuery = query;
 			this.checkForNotices({action: 'plugin_search', data: {type, query}});
+		}
+
+		clearExistingSearchResults() {
+			var existingElements = document.getElementsByClassName('newfold-search-results');
+			var elementsArray = Array.from(existingElements);
+			elementsArray.forEach(function(element) {
+				element.remove();
+			});
 		}
 
 		onReceiveNotices(notices) {
 			notices.forEach(notice => {
 				(new RealtimeNotice(notice)).maybeRender();
+			});
+
+			this.clearExistingSearchResults();
+			notices.forEach(notice => {
+				(new PluginSearchResult(notice, this.searchQuery)).maybeRender();
 			});
 		}
 

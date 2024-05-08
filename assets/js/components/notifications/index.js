@@ -102,6 +102,10 @@ const Notifications = ({methods, constants, ...props}) => {
                 // );
                 var isContextMatch = false;
                 notification.locations.forEach(location => {
+                    if ( location.context === 'wp-plugin-search' ) {
+                        isContextMatch = false;
+                        return;
+                    }
                     if ( location.context === constants.context ) {
                         isContextMatch = true;
                     }
@@ -163,16 +167,18 @@ const Notifications = ({methods, constants, ...props}) => {
             </div>
         );
     } else {
+        console.log(activeNotifications);
         return (
             <div className={methods.classnames('newfold-notifications-wrapper')}>
                 {activeNotifications.map(notification => (
-                    <Notification 
+                                            <Notification 
                         id={notification.id} 
                         key={notification.id}
                         content={notification.content}
                         constants={constants}
                         methods={methods}
                     />
+
                 ))}
             </div>
         );
