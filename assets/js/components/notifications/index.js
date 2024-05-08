@@ -167,11 +167,10 @@ const Notifications = ({methods, constants, ...props}) => {
             </div>
         );
     } else {
-        console.log(activeNotifications);
         return (
             <div className={methods.classnames('newfold-notifications-wrapper')}>
                 {activeNotifications.map(notification => (
-                                            <Notification 
+                    <Notification 
                         id={notification.id} 
                         key={notification.id}
                         content={notification.content}
