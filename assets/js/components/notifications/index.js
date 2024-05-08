@@ -177,7 +177,6 @@ const Notifications = ({methods, constants, ...props}) => {
                         constants={constants}
                         methods={methods}
                     />
-
                 ))}
             </div>
         );
