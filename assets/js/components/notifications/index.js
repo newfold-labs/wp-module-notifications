@@ -37,15 +37,15 @@ const Notifications = ({methods, constants, ...props}) => {
             )
         }).then( ( response ) => {
             setAllNotifications(response);
-		});
-	}, [] );
+        });
+    }, [] );
 
     // on update notifications, context or page calculate active notifications
     methods.useEffect(() => {
         setActiveNotifications(
             filterNotifications(allNotifications)
         );
-	}, [allNotifications, constants.page]);
+    }, [allNotifications, constants.page]);
 
     /**
      * Wrapper method to filter notifications
@@ -73,7 +73,7 @@ const Notifications = ({methods, constants, ...props}) => {
      * @returns Array of filtered notifications - removes expired notifications
      */
     const filterByExpiry = (notifications) => {
-        const now = Date.now();
+        const now = Math.round(Date.now() / 1000);
         // console.log( 'Now: ' + now );
         // filter out expired notifications
         return methods.filter(notifications, 
@@ -150,19 +150,33 @@ const Notifications = ({methods, constants, ...props}) => {
         );
     }
 
-    return (
-        <div className={methods.classnames('newfold-notifications-wrapper')}>
-            {activeNotifications.map(notification => (
+    if (`${window.NewfoldRuntime.plugin.brand}-app-nav` === constants.context && activeNotifications.length > 0) {
+        return (
+            <div className={methods.classnames('newfold-nav-notifications-wrapper nfd-mt-4')}>
                 <Notification 
-                    id={notification.id} 
-                    key={notification.id}
-                    content={notification.content}
+                    id={activeNotifications[0].id} 
+                    key={activeNotifications[0].id}
+                    content={activeNotifications[0].content}
                     constants={constants}
                     methods={methods}
                 />
-            ))}
-        </div>
-    )
+            </div>
+        );
+    } else {
+        return (
+            <div className={methods.classnames('newfold-notifications-wrapper')}>
+                {activeNotifications.map(notification => (
+                    <Notification 
+                        id={notification.id} 
+                        key={notification.id}
+                        content={notification.content}
+                        constants={constants}
+                        methods={methods}
+                    />
+                ))}
+            </div>
+        );
+    }
 
 };
 

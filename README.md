@@ -11,6 +11,17 @@
 
 A module for managing Newfold in-site notifications.
 
+## Module Responsibilities
+- Renders admin notices contextually on specific admin screens or globally unless they have expired or been dismissed.
+- Provides an API for fetching notifications, dispatching events that update available notifications, and dismissing notifications.
+- Responds in real-time to plugin searches with notifications if triggered.
+
+## Critical Paths
+- Notifications with a specific context should only show on the appropriate pages.
+- Notifications that have expired should not show at all.
+- Notifications that have been dismissed should not show again.
+- A plugin search for a specific matching keyword should render a notification in real-time.
+
 ## Installation
 
 ### 1. Add the Newfold Satis to your `composer.json`.

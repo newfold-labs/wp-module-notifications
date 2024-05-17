@@ -46,17 +46,17 @@ class AdminNotices {
 		self::openContainer();
 
 		if ( $collection->count() ) {
-			$collection->each(
-				function ( Notification $notification ) use ( $page ) {
-					if ( $notification->shouldShow( 'wp-admin-notice', array( 'page' => $page ) ) ) {
-						?>
-                        <div class="newfold-notice" data-id="<?php echo esc_attr( $notification->id ); ?>">
-							<?php echo $notification->content; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
-                        </div>
-						<?php
-					}
+			// Only show the latest notification that should be shown on this page
+			foreach ( $collection as $notification ) {
+				if ( $notification->shouldShow( 'wp-admin-notice', array( 'page' => $page ) ) ) {
+					?>
+					<div class="newfold-notice" data-id="<?php echo esc_attr( $notification->id ); ?>">
+						<?php echo $notification->content; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
+					</div>
+					<?php
+					break;
 				}
-			);
+			}
 		}
 
 		self::closeContainer();

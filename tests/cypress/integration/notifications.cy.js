@@ -8,7 +8,7 @@ const notifications = [
 				pages: '#/settings',
 			},
 		],
-		expiration: 2748863456503,
+		expiration: 2748820256,
 		content:
 			'<div class="newfold-notice notice notice-success" style="position:relative;"><p>Notice should only display on plugin app settings page<button type="button" data-action="close" class="notice-dismiss"><span class="screen-reader-text">Dismiss this notice.</span></button></p></div>',
 	},
@@ -20,7 +20,7 @@ const notifications = [
 				pages: [ '#/home/onboarding', '#/home' ],
 			},
 		],
-		expiration: 2749860279240,
+		expiration: 2749860279,
 		content:
 			'<div class="newfold-notice notice notice-error" style="position:relative;"><p>Here is a plugin notice it should display on home and onboarding screens only! <button type="button" data-action="close" class="notice-dismiss"><span class="screen-reader-text">Dismiss this notice.</span></button></p></div>',
 	},
@@ -32,7 +32,7 @@ const notifications = [
 				pages: [ '#/marketplace' ],
 			},
 		],
-		expiration: 2749860279240,
+		expiration: 2749860279,
 		content:
 			'<div class="newfold-notice notice notice-info" style="position:relative;"><p>Here is a plugin notice it should display on marketplace themes screen only! <button type="button" data-action="close" class="notice-dismiss"><span class="screen-reader-text">Dismiss this notice.</span></button></p></div>',
 	},
@@ -48,9 +48,21 @@ const notifications = [
 				pages: 'all',
 			},
 		],
-		expiration: 2749860279240,
+		expiration: 2749860279,
 		content:
 			'<div class="newfold-notice notice notice-warning" style="position:relative;"><p>Here is a notice it should display everywhere in the app and in wp-admin! <button type="button" data-action="close" class="notice-dismiss"><span class="screen-reader-text">Dismiss this notice.</span></button></p></div>',
+	},
+	{
+		id: 'test-5',
+		locations: [
+			{
+				context: Cypress.env( 'pluginId' ) + '-app-nav',
+				pages: 'all',
+			},
+		],
+		expiration: 2749860279,
+		content:
+			'<div class="newfold-notice notice" style="position:relative; display: block;"><p>Notice should display in the app side nav<button type="button" data-action="close" class="notice-dismiss"><span class="screen-reader-text">Dismiss this notice.</span></button></p></div>',
 	},
 	{
 		id: 'test-expired',
@@ -60,7 +72,7 @@ const notifications = [
 				pages: 'all',
 			},
 		],
-		expiration: 1649860279240,
+		expiration: 1649817079,
 		content:
 			'<div class="newfold-notice notice notice-error" style="position:relative;"><p>Here is an expired notice it should never display anywhere even though it has location `all` <button type="button" data-action="close" class="notice-dismiss"><span class="screen-reader-text">Dismiss this notice.</span></button></p></div>',
 	},
@@ -70,18 +82,22 @@ describe( 'Notifications', () => {
 	const appClass = '.' + Cypress.env( 'appId' );
 
 	before( () => {
+		cy.exec( 'npx wp-env run cli wp transient delete newfold_notifications', {failOnNonZeroExit: false} );
+		cy.visit( '/wp-admin/index.php' );
 		cy.intercept(
 			{
 				method: 'GET',
 				url: /newfold-notifications(\/|%2F)v1(\/|%2F)notifications/,
 			},
 			notifications
-		);
+		).as( 'notifications' );
 
 		cy.visit(
 			'/wp-admin/admin.php?page=' + Cypress.env( 'pluginId' ) + '#/home',
 			{ timeout: 30000 }
 		);
+
+		cy.wait( '@notifications' );
 	} );
 
 	it( 'Is Accessible', () => {
@@ -125,6 +141,18 @@ describe( 'Notifications', () => {
 		cy.get(
 			'.newfold-notifications-wrapper #notification-test-1'
 		).contains( 'display on plugin app settings page' );
+	} );
+
+	// notification renders on the side nav
+	it( 'Test notification displays in app side nav', () => {
+		cy.get( '.newfold-nav-notifications-wrapper #notification-test-5' )
+			.should( 'be.visible' )
+			.should( 'have.attr', 'data-id' )
+			.and( 'equal', 'test-5' );
+
+		cy.get(
+			'.newfold-nav-notifications-wrapper #notification-test-5'
+		).contains( 'display in the app side nav' );
 	} );
 
 	// expired notification should not show
