@@ -32,6 +32,11 @@ class NotificationsRepository {
 	 */
 	public function __construct( $fetch_notices = true ) {
 
+		// If there is no Hiive connection, bail.
+		if(! HiiveConnection::is_connected()) {
+			return;
+		}
+
 		$notifications = get_transient( self::TRANSIENT );
 		
 		// load test data TODO REMOVE
