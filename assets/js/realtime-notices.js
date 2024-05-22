@@ -171,7 +171,8 @@
 			
 			let isQueryMatch = false;
 			queryTokens.forEach(queryToken => {
-				if (this.storedQuery.toLowerCase().includes(queryToken.toLowerCase())) {
+				const regexPattern = new RegExp('^' + this.storedQuery.toLowerCase().replace(/\*/g, '.*') + '$');
+				if (regexPattern.test(queryToken.toLowerCase())) {
 					isQueryMatch = true;
 					return;
 				}
