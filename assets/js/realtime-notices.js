@@ -168,10 +168,9 @@
 			}
 
 			const queryTokens = this.searchQuery.split(" ");
-			
+			const regexPattern = new RegExp('^' + this.storedQuery.toLowerCase().replace(/\*/g, '.*') + '$');
 			let isQueryMatch = false;
 			queryTokens.forEach(queryToken => {
-				const regexPattern = new RegExp('^' + this.storedQuery.toLowerCase().replace(/\*/g, '.*') + '$');
 				if (regexPattern.test(queryToken.toLowerCase())) {
 					isQueryMatch = true;
 					return;
