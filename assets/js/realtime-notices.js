@@ -147,15 +147,29 @@
 
 	}
 
-	class PluginSearchResult extends RealtimeNotice {
+	class PluginAndThemeSearchResult extends RealtimeNotice {
 
 		searchQuery = '';
 		storedQuery = '';
+		action;
+		wpContainerSelector;
+		cardSelector;
 
-		constructor({id, content, expiration, locations, query}, searchQuery) {
+		constructor({id, content, expiration, locations, query}, searchQuery, action) {
 			super({id, content, expiration, locations});
 			this.searchQuery = searchQuery;
 			this.storedQuery = query;
+			this.action = action;
+			switch (action) {
+				case 'plugin_search':
+					this.wpContainerSelector = '#the-list';
+					this.cardSelector = 'plugin-card';
+				break;
+				case 'theme_search':
+					this.wpContainerSelector = 'div.themes.wp-clearfix';
+					this.cardSelector = 'theme';
+				break;
+			}
 		}
 
 		shouldShow() {
@@ -163,7 +177,7 @@
 			let shouldShow = false;
 
 			// Don't show if it already exists
-			if (document.querySelector('div.plugin-card.newfold-search-results[data-id="' + this.id + '"]') !== null) {
+			if (document.querySelector(this.cardSelector + 'div.' + this.cardSelector + '.newfold-search-results[data-id="' + this.id + '"]') !== null) {
 				return shouldShow;
 			}
 
@@ -187,13 +201,27 @@
 				// Check if any location has the proper context
 				this.locations.forEach(
 					({context, pages}) => {
-						if ('wp-plugin-search' === context) {
-							if (Array.isArray(pages) && pages.includes('plugin-install.php')) {
-								shouldShow = true;
-							}
-							if (pages === 'all') {
-								shouldShow = true;
-							}
+						switch (this.action) {
+							case 'plugin_search':
+								if ('wp-plugin-search' === context) {
+									if (Array.isArray(pages) && pages.includes('plugin-install.php')) {
+										shouldShow = true;
+									}
+									if (pages === 'all') {
+										shouldShow = true;
+									}
+								}
+							break;
+							case 'theme_search':
+								if ('wp-theme-search' === context) {
+									if (Array.isArray(pages) && pages.includes('theme-install.php')) {
+										shouldShow = true;
+									}
+									if (pages === 'all') {
+										shouldShow = true;
+									}
+								}
+							break;
 						}
 					}
 				);
@@ -204,7 +232,7 @@
 
 		createElement() {
 			const el = document.createElement('div');
-			el.setAttribute('class', 'plugin-card newfold-search-results');
+			el.setAttribute('class', this.cardSelector+' newfold-search-results');
 			el.setAttribute('data-id', this.id);
 			el.innerHTML = this.content;
 			this.el = el;
@@ -213,7 +241,7 @@
 
 		insertElement(el) {
 			const insertIntoList = () => {
-				const theList = document.querySelector('#the-list');
+				const theList = document.querySelector(this.wpContainerSelector);
 				if (theList) {
 					clearInterval(interval);
 					theList.insertAdjacentElement('afterbegin', el);
@@ -230,35 +258,52 @@
 
 		inputHandler = _.debounce(this.onPluginSearch.bind(this), 1000);
 		searchQuery;
+		typeSelector = '';
+		action;
 
 		static init() {
 			const event = new PluginSearch();
+			switch (newfoldRealtimeData?.screenID) {
+				case 'plugin-install':
+					event.searchInputSelector = 'search-plugins';
+					event.typeSelector = 'typeselector';
+					event.action = 'plugin_search';
+				break;
+				case 'theme-install':
+					event.searchInputSelector = 'wp-filter-search-input';
+					event.action = 'theme_search';
+				break;
+			}
 			event.enable();
 		}
 
 		enable() {
 			document
-				.getElementById('search-plugins')
+				.getElementById(this.searchInputSelector)
 				.addEventListener('input', this.inputHandler);
-			document
-				.getElementById('typeselector')
+			if (this.typeSelector) {
+				document
+				.getElementById(this.typeSelector)
 				.addEventListener('change', this.onPluginSearch.bind(this));
+			}
 		}
 
 		disable() {
 			document
-				.getElementById('search-plugins')
+				.getElementById(this.searchInputSelector)
 				.removeEventListener('input', this.inputHandler);
-			document
-				.getElementById('typeselector')
+			if (this.typeSelector) {
+				document
+				.getElementById(this.typeSelector)
 				.removeEventListener('change', this.onPluginSearch.bind(this));
+			}
 		}
 
 		onPluginSearch(e) {
-			const type = document.getElementById('typeselector').value;
-			const query = document.getElementById('search-plugins').value;
+			const type = this.typeSelector ? document.getElementById(this.typeSelector).value : '';
+			const query = document.getElementById(this.searchInputSelector).value;
 			this.searchQuery = query;
-			this.checkForNotices({action: 'plugin_search', data: {type, query}});
+			this.checkForNotices({action: this.action, data: {type, query}});
 		}
 
 		clearExistingSearchResults() {
@@ -276,7 +321,7 @@
 
 			this.clearExistingSearchResults();
 			notices.forEach(notice => {
-				(new PluginSearchResult(notice, this.searchQuery)).maybeRender();
+				(new PluginAndThemeSearchResult(notice, this.searchQuery, this.action)).maybeRender();
 			});
 		}
 
