@@ -102,6 +102,10 @@ const Notifications = ({methods, constants, ...props}) => {
                 // );
                 var isContextMatch = false;
                 notification.locations.forEach(location => {
+                    if ( location.context === 'wp-plugin-search' || location.context === 'wp-theme-search' ) {
+                        isContextMatch = false;
+                        return;
+                    }
                     if ( location.context === constants.context ) {
                         isContextMatch = true;
                     }
