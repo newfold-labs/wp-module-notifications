@@ -87,7 +87,7 @@ class AdminNotices {
 
 		// Handle realtime notifications
 		$screen = get_current_screen();
-		if ( 'plugin-install' === $screen->id ) {
+		if ( 'plugin-install' === $screen->id || 'theme-install' === $screen->id ) {
 			// Enqueue and set local values for realtime script on plugin install page only
 			wp_enqueue_script(
 				'newfold-plugin-realtime-notices',
@@ -96,6 +96,11 @@ class AdminNotices {
 				container()->plugin()->version,
 				true
 			);
+
+			// Localize the script with screen ID
+			wp_localize_script( 'newfold-plugin-realtime-notices', 'newfoldRealtimeData', array(
+				'screenID' => $screen->id,
+			) );
 		}
 
 		// Enqueue and set local values for dismiss script
