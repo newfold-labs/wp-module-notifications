@@ -102,6 +102,10 @@ const Notifications = ({methods, constants, ...props}) => {
                 // );
                 var isContextMatch = false;
                 notification.locations.forEach(location => {
+                    if ( location.context === 'wp-plugin-search' || location.context === 'wp-theme-search' ) {
+                        isContextMatch = false;
+                        return;
+                    }
                     if ( location.context === constants.context ) {
                         isContextMatch = true;
                     }
@@ -152,7 +156,7 @@ const Notifications = ({methods, constants, ...props}) => {
 
     if (`${window.NewfoldRuntime.plugin.brand}-app-nav` === constants.context && activeNotifications.length > 0) {
         return (
-            <div className={methods.classnames('newfold-nav-notifications-wrapper nfd-mt-4')}>
+            <div className={'newfold-nav-notifications-wrapper nfd-mt-4'}>
                 <Notification 
                     id={activeNotifications[0].id} 
                     key={activeNotifications[0].id}
@@ -164,7 +168,7 @@ const Notifications = ({methods, constants, ...props}) => {
         );
     } else {
         return (
-            <div className={methods.classnames('newfold-notifications-wrapper')}>
+            <div className={'newfold-notifications-wrapper'}>
                 {activeNotifications.map(notification => (
                     <Notification 
                         id={notification.id} 
