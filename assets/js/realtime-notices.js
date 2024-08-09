@@ -166,7 +166,7 @@
 					this.cardSelector = 'plugin-card';
 				break;
 				case 'theme_search':
-					this.wpContainerSelector = 'div.themes.wp-clearfix';
+					this.wpContainerSelector = '#wpbody-content > div.wrap > div.theme-browser.content-filterable.rendered > div';
 					this.cardSelector = 'theme';
 				break;
 			}
@@ -232,7 +232,7 @@
 
 		createElement() {
 			const el = document.createElement('div');
-			el.setAttribute('class', this.cardSelector+' newfold-search-results');
+			el.setAttribute('class', `${this.cardSelector} newfold-search-results`);
 			el.setAttribute('data-id', this.id);
 			el.innerHTML = this.content;
 			this.el = el;
@@ -278,14 +278,39 @@
 		}
 
 		enable() {
-			document
-				.getElementById(this.searchInputSelector)
-				.addEventListener('input', this.inputHandler);
-			if (this.typeSelector) {
-				document
-				.getElementById(this.typeSelector)
-				.addEventListener('change', this.onPluginSearch.bind(this));
+			const addEventListeners = () => {
+				const searchInput = document.getElementById(this.searchInputSelector);
+				if (searchInput) {
+					searchInput.addEventListener('input', this.inputHandler);
+				}
+
+				if (this.typeSelector) {
+					const typeSelector = document.getElementById(this.typeSelector);
+					if (typeSelector) {
+						typeSelector.addEventListener('change', this.onPluginSearch.bind(this));
+					}
+				}
+			};
+
+			// Check if elements are already in the DOM
+			if (document.getElementById(this.searchInputSelector) && (!this.typeSelector || document.getElementById(this.typeSelector))) {
+				addEventListeners();
+				return;
 			}
+
+			// Set up a MutationObserver to watch for changes in the DOM
+			const observer = new MutationObserver(() => {
+				const searchInputExists = document.getElementById(this.searchInputSelector);
+				const typeSelectorExists = !this.typeSelector || document.getElementById(this.typeSelector);
+
+				if (searchInputExists && typeSelectorExists) {
+					addEventListeners();
+					observer.disconnect();  // Stop observing once elements are found
+				}
+			});
+
+			// Start observing the document for child elements being added
+			observer.observe(document.body, { childList: true, subtree: true });
 		}
 
 		disable() {
