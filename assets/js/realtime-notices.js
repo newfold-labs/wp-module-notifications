@@ -366,6 +366,7 @@
 					}
 				)
 				.then(response => {
+					return response;
 					if (response.status !== 201) {
 						throw new Error(response.statusText);
 					}
