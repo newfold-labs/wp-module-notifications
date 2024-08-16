@@ -49,7 +49,10 @@ describe('Theme Search', () => {
         method: 'POST',
         url: /newfold-notifications(\/|%2F)v1(\/|%2F)notifications(\/|%2F)events/,
       },
-      notifications
+      {
+        statusCode: 201,
+        body: notifications,
+      }
     ).as('notifications');
 
     cy.wait('@notifications');
@@ -65,7 +68,10 @@ describe('Theme Search', () => {
         method: 'POST',
         url: /newfold-notifications(\/|%2F)v1(\/|%2F)notifications(\/|%2F)events/,
       },
-      notifications
+      {
+        statusCode: 201,
+        body: notifications,
+      }
     ).as('notifications');
 
     cy.wait('@notifications');

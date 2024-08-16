@@ -37,7 +37,6 @@ const notifications = {
 };
 
 describe('Plugin Search', () => {
-  const appClass = '.' + Cypress.env('appId');
 
   before(() => {
     cy.exec('npx wp-env run cli wp transient delete newfold_notifications', { failOnNonZeroExit: false });
@@ -47,7 +46,10 @@ describe('Plugin Search', () => {
         method: 'POST',
         url: /newfold-notifications(\/|%2F)v1(\/|%2F)notifications(\/|%2F)events/,
       },
-      notifications
+      {
+        statusCode: 201,
+        body: notifications,
+      }
     ).as('notifications');
 
 
