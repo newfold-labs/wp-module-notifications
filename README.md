@@ -36,7 +36,7 @@ A module for managing Newfold in-site notifications.
  composer require newfold-labs/wp-module-notifications
  ```
 
-[More on NewFold WordPress Modules](https://github.com/newfold-labs/wp-module-loader)
+[More on Newfold WordPress Modules](https://github.com/newfold-labs/wp-module-loader)
 
 ## TODO:
 
