@@ -61,9 +61,13 @@
 	const addEventListeners = (el) => {
 
 		// Handle notification close/dismiss events
-		const closeButton = el.querySelector('[data-action="close"]');
-		if (closeButton) {
-			closeButton.addEventListener('click', dismissNotice);
+		const closeButtons = Array.from(el.querySelectorAll('[data-action="close"]'));
+		if (closeButtons.length) {
+			closeButtons.forEach(
+				closeButton => {
+					closeButton.addEventListener('click', dismissNotice);
+				}
+			)
 		}
 
 		// Handle notification button click event tracking
