@@ -266,7 +266,6 @@
 		cy.visit(
 			'/wp-admin/admin.php?page=' + Cypress.env( 'pluginId' ) + '#/home'
 		);
-		cy.get('button.ai-sitegen-modal__header__close-button').should('be.visible').click();
 		cy.get( '.newfold-notifications-wrapper #notification-test-3' )
 			.scrollIntoView()
 			.should( 'be.visible' )
