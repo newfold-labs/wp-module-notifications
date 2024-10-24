@@ -90,10 +90,9 @@
 			'<div class="newfold-notice notice notice-error" style="position:relative;"><p>Here is an expired notice it should never display anywhere even though it has location `all` <button type="button" data-action="close" class="notice-dismiss"><span class="screen-reader-text">Dismiss this notice.</span></button></p></div>',
 	},
 	];
-
+	
 	describe( 'Notifications', () => {
 	const appClass = '.' + Cypress.env( 'appId' );
-
 	before( () => {
 		cy.exec( 'npx wp-env run cli wp transient delete newfold_notifications', {failOnNonZeroExit: false} );
 		cy.visit( '/wp-admin/index.php' );
@@ -140,6 +139,7 @@
 		cy.get('.ai-sitegen-modal__footer__content__buttons').eq(0).should('exist')
 		cy.get('button.ai-sitegen-modal__header__close-button').should('be.visible').click();
 		cy.get('.ai-sitegen-modal').should('not.visible');
+		
 	}); 
 
 	it('Should redirect to AI onboarding when TRY NOW button is clicked', () => {
@@ -164,7 +164,6 @@
 	});
 
 	it('Should close the modal when NO THANKS button is clicked', () => {
-
 		cy.visit( '/wp-admin/index.php' );
 		
 		cy.intercept(
@@ -253,6 +252,12 @@
 
 	// dismiss events triggered
 	it( 'Dismissing notification removes it from the page', () => {
+			cy.get('body').then(($body) => {
+			if ($body.find('.ai-sitegen-modal').length > 0 && $body.find('.ai-sitegen-modal').is(':visible')) {
+				// If modal exists and is visible, close it
+				cy.get('button.ai-sitegen-modal__header__close-button').click();
+			}
+		});
 		cy.intercept(
 			{
 				method: 'POST',
