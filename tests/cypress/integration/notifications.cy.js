@@ -124,8 +124,8 @@
 		cy.wait( 1000 );
 		cy.checkA11y( '.ai-sitegen-modal__header' );
 	} );
-
 		
+
 
 	it('Test AI popup appears for the sixmonthold sites and Close button icon is clicked',() => {
 		//const pluginId = GetPluginId();
@@ -148,8 +148,7 @@
 	}); 
 
 	it('Should redirect to AI onboarding when TRY NOW button is clicked', () => {
-		//const pluginId = GetPluginId(); 
-        if ( pluginId == 'bluehost' ) {
+		if ( pluginId == 'bluehost' ) {
 		cy.intercept(
 			{
 				method: 'GET',
@@ -172,10 +171,8 @@
 	});
 
 	it('Should close the modal when NO THANKS button is clicked', () => {
-		//const pluginId = GetPluginId();
-        if ( pluginId == 'bluehost' ) {
+		if ( pluginId == 'bluehost' ) {
 		cy.visit( '/wp-admin/index.php' );
-		
 		cy.intercept(
 			{
 				method: 'GET',
@@ -200,16 +197,12 @@
 	});
 
 
-
-	it( 'Container Exists in plugin app', () => {
+    it( 'Container Exists in plugin app', () => {
 		cy.get( '.newfold-notifications-wrapper' ).should( 'have.length', 1 )
 
 	} );
 
-
-
-
-	// notification renders in all app for `all`
+    // notification renders in all app for `all`
 	it( 'Test notification displays in plugin app with `all`', () => {
 		cy.get( '.newfold-notifications-wrapper #notification-test-5' )
 			.should( 'be.visible' )
@@ -264,14 +257,12 @@
 
 	// dismiss events triggered
 	it( 'Dismissing notification removes it from the page', () => {
-    if ( pluginId == 'bluehost' ) {
 			cy.get('body').then(($body) => {
 			if ($body.find('.ai-sitegen-modal').length > 0 && $body.find('.ai-sitegen-modal').is(':visible')) {
-				// If modal exists and is visible, close it
 				cy.get('button.ai-sitegen-modal__header__close-button').click();
 			}
 		});
-	}
+	
 		cy.intercept(
 			{
 				method: 'POST',
