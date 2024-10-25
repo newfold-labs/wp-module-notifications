@@ -217,6 +217,11 @@
 
 	// notification renders only on specified app page
 	it( 'Test notification displays in plugin app for specific page (settings)', () => {
+		cy.get('body').then(($body) => {
+			if ($body.find('.ai-sitegen-modal').length > 0 && $body.find('.ai-sitegen-modal').is(':visible')) {
+				cy.get('button.ai-sitegen-modal__header__close-button').click();
+			}
+		});
 		cy.get( '.newfold-notifications-wrapper #notification-test-2' ).should(
 			'not.exist'
 		);
