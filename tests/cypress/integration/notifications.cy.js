@@ -1,4 +1,7 @@
 	// <reference types="Cypress" />
+	import { GetPluginId } from './wp-module-support/pluginID.cy';
+	const pluginId = GetPluginId();
+	
 	const notifications = [
 	{
 		id: 'test-1',
@@ -125,6 +128,8 @@
 		
 
 	it('Test AI popup appears for the sixmonthold sites and Close button icon is clicked',() => {
+		//const pluginId = GetPluginId();
+        if ( pluginId == 'bluehost' ) {
 		cy.get('img[class="ai-sitegen-modal__content__right-section__heading__ai-icon"]')
 		.should('exist');
 		cy.get( '.newfold-notifications-wrapper #notification-test-1' )
@@ -139,10 +144,12 @@
 		cy.get('.ai-sitegen-modal__footer__content__buttons').eq(0).should('exist')
 		cy.get('button.ai-sitegen-modal__header__close-button').should('be.visible').click();
 		cy.get('.ai-sitegen-modal').should('not.visible');
-		
+	}
 	}); 
 
 	it('Should redirect to AI onboarding when TRY NOW button is clicked', () => {
+		//const pluginId = GetPluginId(); 
+        if ( pluginId == 'bluehost' ) {
 		cy.intercept(
 			{
 				method: 'GET',
@@ -161,9 +168,12 @@
 		.click();
 	cy.url().should('include','/index.php?page=nfd-onboarding#/wp-setup/step/fork');
 	cy.get('.nfd-onboarding-sitegen-options__option--large').should('be.visible');
+    }
 	});
 
 	it('Should close the modal when NO THANKS button is clicked', () => {
+		//const pluginId = GetPluginId();
+        if ( pluginId == 'bluehost' ) {
 		cy.visit( '/wp-admin/index.php' );
 		
 		cy.intercept(
@@ -186,7 +196,9 @@
 		.and('contain', 'NO, THANKS')
 		.scrollIntoView().click();
 		cy.get('.ai-sitegen-modal').should('not.visible');
+	}
 	});
+
 
 
 	it( 'Container Exists in plugin app', () => {
@@ -252,12 +264,14 @@
 
 	// dismiss events triggered
 	it( 'Dismissing notification removes it from the page', () => {
+    if ( pluginId == 'bluehost' ) {
 			cy.get('body').then(($body) => {
 			if ($body.find('.ai-sitegen-modal').length > 0 && $body.find('.ai-sitegen-modal').is(':visible')) {
 				// If modal exists and is visible, close it
 				cy.get('button.ai-sitegen-modal__header__close-button').click();
 			}
 		});
+	}
 		cy.intercept(
 			{
 				method: 'POST',
