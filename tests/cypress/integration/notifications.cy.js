@@ -136,8 +136,7 @@
 			.should('be.visible')     
 			.and('contain.text', 'Included FREE in your plan!');
 		cy.get('.ai-sitegen-modal__footer__content__buttons').eq(0).should('exist')
-		cy.get('button.ai-sitegen-modal__header__close-button').should('be.visible')
-		.scrollIntoView().click();
+		cy.get('button.ai-sitegen-modal__header__close-button').scrollIntoView().should('be.visible').click();
 		cy.get('.ai-sitegen-modal').should('not.visible');
 	}
 	}); 
@@ -155,10 +154,10 @@
 		cy.reload();
 		cy.wait( '@notifications' );
 		cy.wait( 2000 );
-		cy.get('.ai-sitegen-modal__footer__content__buttons__try-now')
+		cy.get('button.ai-sitegen-modal__footer__content__buttons__try-now').scrollIntoView()
 		.should('be.visible')
 		.and('contain', 'TRY NOW')
-		.scrollIntoView().click();
+		.click();
 	cy.url().should('include','/index.php?page=nfd-onboarding#/wp-setup/step/fork');
 	cy.get('.nfd-onboarding-sitegen-options__option--large').should('be.visible');
     }
@@ -182,10 +181,10 @@
 		);
 		cy.wait( '@notifications' );
 		cy.wait( 2000 );
-		cy.get('button.ai-sitegen-modal__footer__content__buttons__no-thanks')
+		cy.get('button.ai-sitegen-modal__footer__content__buttons__no-thanks').scrollIntoView()
 		.should('be.visible')
 		.and('contain', 'NO, THANKS')
-		.scrollIntoView().click();
+		.click();
 		cy.get('.ai-sitegen-modal').should('not.visible');
 	}
 	});
