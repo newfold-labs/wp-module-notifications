@@ -310,7 +310,7 @@ describe( 'Notifications', () => {
 		).should( 'be.visible' );
 		cy.get(
 			'.newfold-notifications-wrapper #notification-test-home'
-		).contains( 'display on home and onboarding screens' );
+		).contains( 'display on home screen only' );
 
 		cy.get(
 			'#notification-test-home button.notice-dismiss[data-action="close"]'
