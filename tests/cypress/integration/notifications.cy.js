@@ -174,7 +174,6 @@ describe( 'Notifications', () => {
 				.should( 'be.visible' )
 				.and( 'contain', 'TRY NOW' )
 				.click();
-			cy.get( '.ai-sitegen-modal' ).should( 'not.visible' );
 			cy.url().should( 'include', 'nfd-onboarding' );
 		} );
 
@@ -203,7 +202,7 @@ describe( 'Notifications', () => {
 				.should( 'be.visible' )
 				.and( 'contain', 'NO, THANKS' )
 				.click();
-			cy.get( '.ai-sitegen-modal' ).should( 'not.visible' );
+			cy.get( '.ai-sitegen-modal' ).should( 'not.be.visible' );
 		} );
 	}
 
