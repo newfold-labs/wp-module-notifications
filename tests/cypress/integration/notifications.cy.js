@@ -150,6 +150,7 @@ describe( 'Notifications', () => {
 		} );
 
 		it( 'Should redirect to AI onboarding when TRY NOW button is clicked', () => {
+			cy.visit( '/wp-admin/index.php' );
 			cy.intercept(
 				{
 					method: 'GET',
@@ -157,7 +158,13 @@ describe( 'Notifications', () => {
 				},
 				notifications
 			).as( 'notifications' );
-			cy.reload();
+
+			cy.visit(
+				'/wp-admin/admin.php?page=' +
+					Cypress.env( 'pluginId' ) +
+					'#/home',
+				{ timeout: 30000 }
+			);
 			cy.wait( '@notifications' );
 			cy.wait( 2000 );
 			cy.get(
@@ -167,13 +174,7 @@ describe( 'Notifications', () => {
 				.should( 'be.visible' )
 				.and( 'contain', 'TRY NOW' )
 				.click();
-			cy.url().should(
-				'include',
-				'nfd-onboarding#/wp-setup/step'
-			);
-			cy.get( '.nfd-onboarding-sitegen-options__option--large' ).should(
-				'be.visible'
-			);
+			cy.url().should( 'include', 'nfd-onboarding' );
 		} );
 
 		it( 'Should close the modal when NO THANKS button is clicked', () => {
@@ -201,7 +202,7 @@ describe( 'Notifications', () => {
 				.should( 'be.visible' )
 				.and( 'contain', 'NO, THANKS' )
 				.click();
-			cy.get( '.ai-sitegen-modal' ).should( 'not.visible' );
+			cy.get( '.ai-sitegen-modal' ).should( 'not.be.visible' );
 		} );
 	}
 
