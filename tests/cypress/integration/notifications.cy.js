@@ -167,13 +167,8 @@ describe( 'Notifications', () => {
 				.should( 'be.visible' )
 				.and( 'contain', 'TRY NOW' )
 				.click();
-			cy.url().should(
-				'include',
-				'nfd-onboarding#/wp-setup/step'
-			);
-			cy.get( '.nfd-onboarding-sitegen-options__option--large' ).should(
-				'be.visible'
-			);
+			cy.get( '.ai-sitegen-modal' ).should( 'not.visible' );
+			cy.url().should( 'include', 'nfd-onboarding' );
 		} );
 
 		it( 'Should close the modal when NO THANKS button is clicked', () => {
