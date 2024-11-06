@@ -150,6 +150,7 @@ describe( 'Notifications', () => {
 		} );
 
 		it( 'Should redirect to AI onboarding when TRY NOW button is clicked', () => {
+			cy.visit( '/wp-admin/index.php' );
 			cy.intercept(
 				{
 					method: 'GET',
@@ -157,7 +158,13 @@ describe( 'Notifications', () => {
 				},
 				notifications
 			).as( 'notifications' );
-			cy.reload();
+
+			cy.visit(
+				'/wp-admin/admin.php?page=' +
+					Cypress.env( 'pluginId' ) +
+					'#/home',
+				{ timeout: 30000 }
+			);
 			cy.wait( '@notifications' );
 			cy.wait( 2000 );
 			cy.get(
