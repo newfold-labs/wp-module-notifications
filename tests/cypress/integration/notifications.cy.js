@@ -169,7 +169,7 @@ describe( 'Notifications', () => {
 				.click();
 			cy.url().should(
 				'include',
-				'/index.php?page=nfd-onboarding#/wp-setup/step/fork'
+				'nfd-onboarding#/wp-setup/step'
 			);
 			cy.get( '.nfd-onboarding-sitegen-options__option--large' ).should(
 				'be.visible'
