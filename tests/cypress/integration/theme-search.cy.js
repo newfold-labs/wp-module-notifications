@@ -43,7 +43,6 @@ const notifications = {
 };
 
 describe( 'Theme Search', { testIsolation: true }, () => {
-
 	beforeEach( () => {
 		wpLogin();
 		wpCli( 'transient delete newfold_notifications' );

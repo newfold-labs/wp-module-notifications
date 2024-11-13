@@ -50,7 +50,7 @@ describe( 'Plugin Search', { testIsolation: true }, () => {
 	} );
 
 	it( 'should display matching plugin search results', () => {
-    cy.intercept(
+		cy.intercept(
 			{
 				method: 'POST',
 				url: /newfold-notifications(\/|%2F)v1(\/|%2F)notifications(\/|%2F)events/,
@@ -77,7 +77,7 @@ describe( 'Plugin Search', { testIsolation: true }, () => {
 	} );
 
 	it( 'should not display non-matching plugin search results', () => {
-    cy.intercept(
+		cy.intercept(
 			{
 				method: 'POST',
 				url: /newfold-notifications(\/|%2F)v1(\/|%2F)notifications(\/|%2F)events/,
