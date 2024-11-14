@@ -1,7 +1,7 @@
 // <reference types="Cypress" />
 import { wpLogin, wpCli } from '../wp-module-support/utils.cy';
 
-const aiNotification = [
+const modalNotification = [
 	{
 		id: 'test-ai',
 		locations: [
@@ -30,7 +30,7 @@ describe( 'AI Notification', { testIsolation: true }, () => {
 					method: 'GET',
 					url: /newfold-notifications(\/|%2F)v1(\/|%2F)notifications/,
 				},
-				aiNotification
+				modalNotification
 			).as( 'notifications' );
 			cy.visit(
 				'/wp-admin/admin.php?page=' +
@@ -60,13 +60,13 @@ describe( 'AI Notification', { testIsolation: true }, () => {
 			cy.get( '.ai-sitegen-modal' ).should( 'not.visible' );
 		} );
 
-		it( 'redirecta to AI onboarding when TRY NOW button is clicked', () => {
+		it( 'redirects to AI onboarding when TRY NOW button is clicked', () => {
 			cy.intercept(
 				{
 					method: 'GET',
 					url: /newfold-notifications(\/|%2F)v1(\/|%2F)notifications/,
 				},
-				aiNotification
+				modalNotification
 			).as( 'notifications' );
 			cy.visit(
 				'/wp-admin/admin.php?page=' +
@@ -91,7 +91,7 @@ describe( 'AI Notification', { testIsolation: true }, () => {
 					method: 'GET',
 					url: /newfold-notifications(\/|%2F)v1(\/|%2F)notifications/,
 				},
-				aiNotification
+				modalNotification
 			).as( 'notifications' );
 			cy.visit(
 				'/wp-admin/admin.php?page=' +
