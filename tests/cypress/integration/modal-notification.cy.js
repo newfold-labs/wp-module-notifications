@@ -20,6 +20,7 @@ describe( 'AI Notification', { testIsolation: true }, () => {
 	beforeEach( () => {
 		wpLogin();
 		wpCli( 'transient delete newfold_notifications' );
+		cy.visit( '/wp-admin/index.php' );
 	} );
 
 	// AI notification for bluehost only
@@ -32,10 +33,9 @@ describe( 'AI Notification', { testIsolation: true }, () => {
 				},
 				modalNotification
 			).as( 'notifications' );
+
 			cy.visit(
-				'/wp-admin/admin.php?page=' +
-					Cypress.env( 'pluginId' ) +
-					'#/home'
+				`/wp-admin/admin.php?page=${ Cypress.env( 'pluginId' ) }#/home`
 			);
 			cy.wait( '@notifications' );
 			cy.get( '.newfold-notifications-wrapper #notification-test-ai' );
@@ -74,7 +74,7 @@ describe( 'AI Notification', { testIsolation: true }, () => {
 					'#/home'
 			);
 			cy.wait( '@notifications' );
-			cy.wait( 2000 );
+			cy.wait( 500 );
 			cy.get(
 				'button.ai-sitegen-modal__footer__content__buttons__try-now'
 			)
@@ -99,7 +99,7 @@ describe( 'AI Notification', { testIsolation: true }, () => {
 					'#/home'
 			);
 			cy.wait( '@notifications' );
-			cy.wait( 2000 );
+			cy.wait( 500 );
 			cy.get(
 				'button.ai-sitegen-modal__footer__content__buttons__no-thanks'
 			)
