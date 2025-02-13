@@ -61,7 +61,7 @@ class AdminNotices {
 
 		self::closeContainer();
 
-		self::adminScripts();
+		self::adminScripts( $collection->count() );
 
 	}
 
@@ -82,8 +82,10 @@ class AdminNotices {
 
 	/**
 	 * Handle scripts
+	 *
+	 * 	@param int $notifications_count The number of notifications
 	 */
-	public static function adminScripts() {
+	public static function adminScripts( $notifications_count ) {
 
 		// Handle realtime notifications
 		$screen = get_current_screen();
@@ -103,14 +105,17 @@ class AdminNotices {
 			) );
 		}
 
-		// Enqueue and set local values for dismiss script
-		wp_enqueue_script(
-			'newfold-dismiss-notices',
-			plugins_url( 'vendor/newfold-labs/wp-module-notifications/assets/js/dismiss-notices.js', container()->plugin()->file ),
-			array( 'nfd-runtime' ),
-			container()->plugin()->version,
-			true
-		);
+		if ( $notifications_count ) {
+			// Enqueue and set local values for dismiss script
+			wp_enqueue_script(
+				'newfold-dismiss-notices',
+				plugins_url( 'vendor/newfold-labs/wp-module-notifications/assets/js/dismiss-notices.js', container()->plugin()->file ),
+				array( 'nfd-runtime' ),
+				container()->plugin()->version,
+				true
+			);
+		}
+
 	}
 
 }
