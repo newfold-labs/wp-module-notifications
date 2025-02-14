@@ -6,6 +6,7 @@ use function NewfoldLabs\WP\ModuleLoader\container;
 
 add_action( 'admin_notices', array( AdminNotices::class, 'maybeRenderAdminNotices' ) );
 add_action( 'rest_api_init', array( NotificationsApi::class, 'registerRoutes' ) );
+\add_action( 'init', array( AdminNotices::class, 'loadTextDomain' ), 100 );
 
 add_action(
 	'nfd_event_log',
