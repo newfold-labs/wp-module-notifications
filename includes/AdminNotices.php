@@ -111,6 +111,32 @@ class AdminNotices {
 			container()->plugin()->version,
 			true
 		);
+
+		\wp_set_script_translations(
+			'newfold-dismiss-notices',
+			'wp-module-notifications',
+			NFD_NOTIFICATIONS_DIR . '/languages'
+		);
+	}
+
+	/**
+	 * Load text domain for Module
+	 *
+	 * @return void
+	 */
+	public static function loadTextDomain() {
+
+		\load_plugin_textdomain(
+			'wp-module-notifications',
+			false,
+			NFD_NOTIFICATIONS_DIR . '/languages'
+		);
+
+		\load_script_textdomain(
+			'newfold-dismiss-notices',
+			'wp-module-notifications',
+			NFD_NOTIFICATIONS_DIR . '/languages'
+		);
 	}
 
 }

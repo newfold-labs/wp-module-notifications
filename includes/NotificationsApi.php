@@ -85,7 +85,7 @@ class NotificationsApi {
 				'args'                => array(
 					'action'   => array(
 						'required'          => true,
-						'description'       => __( 'Event action', 'newfold-module-notifications' ),
+						'description'       => __( 'Event action', 'wp-module-notifications' ),
 						'type'              => 'string',
 						'sanitize_callback' => function ( $value ) {
 							return sanitize_title( $value );
@@ -93,19 +93,19 @@ class NotificationsApi {
 					),
 					'category' => array(
 						'default'           => 'admin',
-						'description'       => __( 'Event category', 'newfold-module-notifications' ),
+						'description'       => __( 'Event category', 'wp-module-notifications' ),
 						'type'              => 'string',
 						'sanitize_callback' => function ( $value ) {
 							return sanitize_title( $value );
 						},
 					),
 					'data'     => array(
-						'description' => __( 'Event data', 'newfold-module-notifications' ),
+						'description' => __( 'Event data', 'wp-module-notifications' ),
 						'type'        => 'object',
 					),
 					'queue'    => array(
 						'default'           => true,
-						'description'       => __( 'Whether or not to queue the event', 'newfold-module-notifications' ),
+						'description'       => __( 'Whether or not to queue the event', 'wp-module-notifications' ),
 						'type'              => 'boolean',
 						'sanitize_callback' => function ( $value ) {
 							return filter_var( $value, FILTER_VALIDATE_BOOLEAN );
