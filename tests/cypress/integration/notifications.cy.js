@@ -146,7 +146,7 @@ describe( 'Notifications', { testIsolation: true }, () => {
 		).should( 'not.exist' );
 
 		cy.get(
-			'.' + Cypress.env( 'appId' ) + '-app-navitem-Settings'
+			'.' + Cypress.env( 'appId' ) + '-app-navitem-settings'
 		).click();
 		cy.wait( 500 );
 
