@@ -1,0 +1,2 @@
+<?php
+return ['domain'=>'wp-module-notifications','plural-forms'=>'nplurals=2; plural=(n > 1);','language'=>'fr_FR','project-id-version'=>'newfold-labswp-module-staging','pot-creation-date'=>'2025-02-13T09:55:55+00:00','po-revision-date'=>'2025-02-19 15:33','x-generator'=>'WP-CLI 2.11.0','messages'=>['Notifications'=>'Notifications','Event action'=>'Action de l\'événement','Event category'=>'Catégorie d\'événement','Event data'=>'Données d\'événement','Whether or not to queue the event'=>'Si oui ou non la file d\'attente de l\'événement']];
