@@ -111,7 +111,6 @@ class AdminNotices {
 			container()->plugin()->version,
 			true
 		);
-
 	}
 
 }
