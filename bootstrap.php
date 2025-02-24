@@ -14,10 +14,6 @@ if ( function_exists( 'add_action' ) ) {
 					'label'    => __( 'Notifications', 'wp-module-notifications' ),
 					'callback' => function () {
 						require __DIR__ . '/notifications.php';
-
-						if ( ! defined( 'NFD_NOTIFICATIONS_DIR' ) ) {
-							define( 'NFD_NOTIFICATIONS_DIR', __DIR__ );
-						}						
 					},
 					'isActive' => true,
 					'isHidden' => true,
