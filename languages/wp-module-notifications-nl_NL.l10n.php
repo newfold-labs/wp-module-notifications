@@ -1,2 +1,0 @@
-<?php
-return ['domain'=>'wp-module-notifications','plural-forms'=>'nplurals=2; plural=(n != 1);','language'=>'nl_NL','project-id-version'=>'newfold-labswp-module-staging','pot-creation-date'=>'2025-02-13T09:55:55+00:00','po-revision-date'=>'2025-02-19 15:33','x-generator'=>'WP-CLI 2.11.0','messages'=>['Notifications'=>'Notificaties','Event action'=>'Gebeurtenis actie','Event category'=>'Event categorie','Event data'=>'Gebeurtenis gegevens','Whether or not to queue the event'=>'Of het event al dan niet in de wachtrij moet staan']];

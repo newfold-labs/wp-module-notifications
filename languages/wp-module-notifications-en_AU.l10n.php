@@ -1,2 +1,0 @@
-<?php
-return ['domain'=>'wp-module-notifications','plural-forms'=>'nplurals=2; plural=(n != 1);','language'=>'en_AU','project-id-version'=>'','pot-creation-date'=>'2025-02-13T10:18:39+00:00','po-revision-date'=>'2025-02-13 19:24+0530','x-generator'=>'WP-CLI 2.11.0','messages'=>['Notifications'=>'Notifications','Event action'=>'Event action','Event category'=>'Event category','Event data'=>'Event data','Whether or not to queue the event'=>'Whether or not to queue the event']];
