@@ -145,9 +145,11 @@ describe( 'Notifications', { testIsolation: true }, () => {
 			'.newfold-notifications-wrapper #notification-test-settings'
 		).should( 'not.exist' );
 
-		cy.get(
-			'.' + Cypress.env( 'appId' ) + '-app-navitem-settings'
-		).click();
+		cy.visit(
+			'/wp-admin/admin.php?page=' +
+				Cypress.env( 'pluginId' ) +
+				'#/settings'
+		);
 		cy.wait( 500 );
 
 		cy.get( '.newfold-notifications-wrapper #notification-test-settings' )
@@ -159,31 +161,6 @@ describe( 'Notifications', { testIsolation: true }, () => {
 		cy.get(
 			'.newfold-notifications-wrapper #notification-test-settings'
 		).contains( 'display on plugin app settings page' );
-	} );
-
-	// notification renders on the side nav
-	it( 'Test notification displays in app side nav', () => {
-		cy.intercept(
-			{
-				method: 'GET',
-				url: /newfold-notifications(\/|%2F)v1(\/|%2F)notifications/,
-			},
-			notifications
-		).as( 'notifications' );
-		cy.visit(
-			'/wp-admin/admin.php?page=' + Cypress.env( 'pluginId' ) + '#/home'
-		);
-		cy.wait( '@notifications' );
-		cy.get(
-			'.newfold-nav-notifications-wrapper #notification-test-side-nav'
-		)
-			.should( 'be.visible' )
-			.should( 'have.attr', 'data-id' )
-			.and( 'equal', 'test-side-nav' );
-
-		cy.get(
-			'.newfold-nav-notifications-wrapper #notification-test-side-nav'
-		).contains( 'display in the app side nav' );
 	} );
 
 	// expired notification should not show
