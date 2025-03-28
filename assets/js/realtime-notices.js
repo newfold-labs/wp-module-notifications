@@ -24,10 +24,10 @@
 
 			let shouldShow = false;
 
-			// Don't show if it already exists
-			if (document.querySelector('div.newfold-realtime-notice[data-id="' + this.id + '"]') !== null) {
-				return shouldShow;
-			}
+			// Don't show if it already exists as a realtime or default notification
+            if (document.querySelector('div.newfold-realtime-notice[data-id="' + this.id + '"]') !== null || document.querySelector('div.newfold-notice[data-id="' + this.id + '"]') !== null ) {
+                return shouldShow;
+            }
 
 			// Check if notice has expired
 			if (this.expiration > Math.round(Date.now() / 1000)) {
