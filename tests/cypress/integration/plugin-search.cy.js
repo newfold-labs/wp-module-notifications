@@ -46,7 +46,7 @@ describe( 'Plugin Search', { testIsolation: true }, () => {
 	beforeEach( () => {
 		wpLogin();
 		wpCli( 'transient delete newfold_notifications' );
-		cy.visit( '/wp-admin/plugin-install.php' );
+		cy.visit( '/wp-admin/plugin-install.php?tab=featured' );
 	} );
 
 	it( 'should display matching plugin search results', () => {
