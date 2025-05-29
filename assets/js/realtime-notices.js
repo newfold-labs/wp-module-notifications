@@ -252,6 +252,33 @@
 			const interval = setInterval(insertIntoList, 100);
 		}
 
+		addEventListeners( el ) {
+            // Handle notification close/dismiss events
+            const dismissButton = el.querySelector( '[data-action="dismiss-search"]' );
+			console.log("working")
+            if ( dismissButton ) {
+                dismissButton.addEventListener(
+                    'click',
+                    this.dismissSearch.bind( this )
+                );
+            }
+        }
+
+        dismissSearch( e ) {
+            // e.preventDefault();
+            window.fetch(
+                `${ window.NewfoldRuntime.restUrl }newfold-notifications/v1/notifications/${ this.id }`,
+                {
+                    credentials: 'same-origin',
+                    method: 'DELETE',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-WP-Nonce': window.NewfoldRuntime.restNonce,
+                    },
+                }
+            );
+        }
+
 	}
 
 	class PluginSearch {
