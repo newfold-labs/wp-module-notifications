@@ -255,7 +255,6 @@
 		addEventListeners( el ) {
             // Handle notification close/dismiss events
             const dismissButton = el.querySelector( '[data-action="dismiss-search"]' );
-			console.log("working")
             if ( dismissButton ) {
                 dismissButton.addEventListener(
                     'click',
