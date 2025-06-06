@@ -1,0 +1,7 @@
+{
+  "name": "wp-module-notifications",
+  "version": "1.6.11",
+  "devDependencies": {
+    "@wordpress/env": "^10.22.0"
+  }
+}

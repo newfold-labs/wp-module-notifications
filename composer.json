@@ -1,59 +1,80 @@
 {
-  "name": "newfold-labs/wp-module-notifications",
-  "description": "A module for managing Newfold in-site notifications.",
-  "license": "GPL-2.0-or-later",
-  "repositories": [
-    {
-      "type": "composer",
-      "url": "https://newfold-labs.github.io/satis/",
-      "only": [
-        "newfold-labs/*"
-      ]
+    "name": "newfold-labs/wp-module-notifications",
+    "description": "A module for managing Newfold in-site notifications.",
+    "license": "GPL-2.0-or-later",
+    "repositories": {
+        "outlandishideas/wpackagist": {
+            "type": "composer",
+            "url": "https://wpackagist.org"
+        },
+        "0": {
+            "type": "composer",
+            "url": "https://newfold-labs.github.io/satis/",
+            "only": [
+                "newfold-labs/*"
+            ]
+        },
+        "1": {
+            "type": "composer",
+            "url": "https://bluehost.github.io/satis/",
+            "only": [
+                "bluehost/*",
+                "endurance/*",
+                "mojoness/*",
+                "newfold/*"
+            ]
+        }
     },
-    {
-      "type": "composer",
-      "url": "https://bluehost.github.io/satis/",
-      "only": [
-        "bluehost/*",
-        "endurance/*",
-        "mojoness/*",
-        "newfold/*"
-      ]
-    }
-  ],
-  "authors": [
-    {
-      "name": "Micah Wood",
-      "email": "micah@wpscholar.com"
-    }
-  ],
-  "autoload": {
-    "psr-4": {
-      "NewFoldLabs\\WP\\Module\\Notifications\\": "includes"
+    "authors": [
+        {
+            "name": "Micah Wood",
+            "email": "micah@wpscholar.com"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "NewFoldLabs\\WP\\Module\\Notifications\\": "includes"
+        },
+        "files": [
+            "bootstrap.php"
+        ]
     },
-    "files": [
-      "bootstrap.php"
-    ]
-  },
-  "require-dev": {
-    "newfold-labs/wp-php-standards": "^1.2"
-  },
-  "require": {
-    "newfold-labs/wp-module-data": "^2.0.0",
-    "wpscholar/url": "^1.2",
-    "wp-forge/helpers": "^2.0",
-    "wp-forge/collection": "^1.0"
-  },
-  "scripts": {
-    "fix": "vendor/bin/phpcbf --standard=phpcs.xml .",
-    "lint": "vendor/bin/phpcs --standard=phpcs.xml -s ."
-  },
-  "config": {
-    "allow-plugins": {
-      "dealerdirect/phpcodesniffer-composer-installer": true
+    "require-dev": {
+        "newfold-labs/wp-php-standards": "^1.2",
+        "johnpbloch/wordpress": "@stable",
+        "lucatume/wp-browser": "*",
+        "phpunit/phpcov": "*"
     },
-    "platform": {
-      "php": "7.3.0"
+    "require": {
+        "newfold-labs/wp-module-data": "^2.0.0",
+        "wpscholar/url": "^1.2",
+        "wp-forge/helpers": "^2.0",
+        "wp-forge/collection": "^1.0"
+    },
+    "scripts": {
+        "fix": "vendor/bin/phpcbf --standard=phpcs.xml .",
+        "lint": "vendor/bin/phpcs --standard=phpcs.xml -s .",
+        "test": [
+            "codecept run wpunit"
+        ],
+        "test-coverage": [
+            "codecept run wpunit --coverage wpunit.cov",
+            "phpcov merge --php tests/_output/merged.cov --html tests/_output/html tests/_output;",
+            "echo \"open tests/_output/html/index.html\" to view the report"
+        ]
+    },
+    "config": {
+        "allow-plugins": {
+            "dealerdirect/phpcodesniffer-composer-installer": true,
+            "composer/installers": true,
+            "johnpbloch/wordpress-core-installer": true
+        },
+        "platform": {
+            "php": "7.3"
+        }
+    },
+    "scripts-descriptions": {
+        "test": "Run tests.",
+        "test-coverage": "Run tests with coverage, merge coverage and create HTML report."
     }
-  }
 }
