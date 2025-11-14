@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1756838136">
-  <project timestamp="1756838136">
+<coverage generated="1763154204">
+  <project timestamp="1763154204">
     <file name="/home/runner/work/wp-module-notifications/wp-module-notifications/includes/AdminNotices.php">
-      <class name="NewFoldLabs\WP\Module\Notifications\AdminNotices" namespace="global">
+      <class name="NewfoldLabs\WP\Module\Notifications\AdminNotices" namespace="global">
         <metrics complexity="13" methods="4" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="48" coveredstatements="0" elements="52" coveredelements="0"/>
       </class>
       <line num="16" type="method" name="maybeRenderAdminNotices" visibility="public" complexity="7" crap="56" count="0"/>
@@ -60,7 +60,7 @@
       <metrics loc="122" ncloc="95" classes="1" methods="4" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="48" coveredstatements="0" elements="52" coveredelements="0"/>
     </file>
     <file name="/home/runner/work/wp-module-notifications/wp-module-notifications/includes/Notification.php">
-      <class name="NewFoldLabs\WP\Module\Notifications\Notification" namespace="global">
+      <class name="NewfoldLabs\WP\Module\Notifications\Notification" namespace="global">
         <metrics complexity="26" methods="9" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="56" coveredstatements="0" elements="65" coveredelements="0"/>
       </class>
       <line num="54" type="method" name="__construct" visibility="public" complexity="3" crap="12" count="0"/>
@@ -131,7 +131,7 @@
       <metrics loc="221" ncloc="132" classes="1" methods="9" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="56" coveredstatements="0" elements="65" coveredelements="0"/>
     </file>
     <file name="/home/runner/work/wp-module-notifications/wp-module-notifications/includes/NotificationsApi.php">
-      <class name="NewFoldLabs\WP\Module\Notifications\NotificationsApi" namespace="global">
+      <class name="NewfoldLabs\WP\Module\Notifications\NotificationsApi" namespace="global">
         <metrics complexity="8" methods="1" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="124" coveredstatements="0" elements="125" coveredelements="0"/>
       </class>
       <line num="17" type="method" name="registerRoutes" visibility="public" complexity="8" crap="72" count="0"/>
@@ -262,7 +262,7 @@
       <metrics loc="174" ncloc="158" classes="1" methods="1" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="124" coveredstatements="0" elements="125" coveredelements="0"/>
     </file>
     <file name="/home/runner/work/wp-module-notifications/wp-module-notifications/includes/NotificationsRepository.php">
-      <class name="NewFoldLabs\WP\Module\Notifications\NotificationsRepository" namespace="global">
+      <class name="NewfoldLabs\WP\Module\Notifications\NotificationsRepository" namespace="global">
         <metrics complexity="21" methods="12" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="128" coveredstatements="0" elements="140" coveredelements="0"/>
       </class>
       <line num="33" type="method" name="__construct" visibility="public" complexity="10" crap="110" count="0"/>
