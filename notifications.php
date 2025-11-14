@@ -1,6 +1,6 @@
 <?php
 
-namespace NewFoldLabs\WP\Module\Notifications;
+namespace NewfoldLabs\WP\Module\Notifications;
 
 use function NewfoldLabs\WP\ModuleLoader\container;
 

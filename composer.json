@@ -33,7 +33,7 @@
     ],
     "autoload": {
         "psr-4": {
-            "NewFoldLabs\\WP\\Module\\Notifications\\": "includes"
+            "NewfoldLabs\\WP\\Module\\Notifications\\": "includes"
         },
         "files": [
             "bootstrap.php"
