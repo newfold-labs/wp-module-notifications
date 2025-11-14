@@ -1,6 +1,6 @@
 <?php
 
-namespace NewFoldLabs\WP\Module\Notifications;
+namespace NewfoldLabs\WP\Module\Notifications;
 
 use wpscholar\Url;
 use function NewfoldLabs\WP\ModuleLoader\container;
