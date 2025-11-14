@@ -1,6 +1,6 @@
 <?php
 
-namespace NewFoldLabs\WP\Module\Notifications;
+namespace NewfoldLabs\WP\Module\Notifications;
 
 use NewfoldLabs\WP\Module\Data\HiiveConnection;
 use WP_Forge\Helpers\Arr;
