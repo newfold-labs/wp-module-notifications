@@ -46,7 +46,7 @@
         "phpunit/phpcov": "*"
     },
     "require": {
-        "newfold-labs/wp-module-data": "^2.0.0",
+        "newfold-labs/wp-module-data": "^2.9.1",
         "wpscholar/url": "^1.2",
         "wp-forge/helpers": "^2.0",
         "wp-forge/collection": "^1.0"
