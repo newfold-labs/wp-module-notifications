@@ -6,6 +6,6 @@
     "npm": ">=10.9.0"
   },
   "devDependencies": {
-    "@wordpress/env": "^10.38.0"
+    "@wordpress/env": "^10.39.0"
   }
 }
