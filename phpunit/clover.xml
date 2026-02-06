@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1770390053">
-  <project timestamp="1770390053">
+<coverage generated="1770390103">
+  <project timestamp="1770390103">
     <file name="/home/runner/work/wp-module-notifications/wp-module-notifications/includes/AdminNotices.php">
       <class name="NewfoldLabs\WP\Module\Notifications\AdminNotices" namespace="global">
         <metrics complexity="13" methods="4" coveredmethods="2" conditionals="0" coveredconditionals="0" statements="48" coveredstatements="2" elements="52" coveredelements="4"/>
