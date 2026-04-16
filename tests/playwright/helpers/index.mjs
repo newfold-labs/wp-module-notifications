@@ -300,25 +300,96 @@ async function closeAiModalIfPresent(page) {
 }
 
 /**
+ * True when the request targets the notifications collection or a single notification (dismiss).
+ * Covers pretty permalinks (/wp-json/...), path-encoded segments, and plain permalinks (?rest_route=...).
+ * @param {URL} url
+ */
+function isNewfoldNotificationsApiUrl(url) {
+  const href = url.href;
+  if (/newfold-notifications(%2F|\/)v1(%2F|\/)notifications/i.test(href)) {
+    return true;
+  }
+  const restRoute = url.searchParams.get('rest_route');
+  if (restRoute) {
+    const path = decodeURIComponent(restRoute);
+    return path.includes('newfold-notifications/v1/notifications');
+  }
+  return false;
+}
+
+/**
+ * Extract notification id from dismiss DELETE URL (path or rest_route).
+ * @param {URL} url
+ */
+function parseNotificationDismissId(url) {
+  const pathMatch = url.pathname.match(/\/v1\/notifications\/([^/?]+)\/?$/);
+  if (pathMatch) {
+    return pathMatch[1];
+  }
+  const restRoute = url.searchParams.get('rest_route');
+  if (restRoute) {
+    const path = decodeURIComponent(restRoute);
+    const m = path.match(/\/v1\/notifications\/([^/?]+)/);
+    if (m) {
+      return m[1];
+    }
+  }
+  return null;
+}
+
+/**
+ * Wait until the plugin app has mounted the notifications wrapper (avoid networkidle in wp-admin).
+ * @param {import('@playwright/test').Page} page
+ */
+async function waitForNotificationsUi(page) {
+  await page.locator(SELECTORS.notificationsWrapper).first().waitFor({ state: 'attached', timeout: 20000 });
+}
+
+/**
  * Setup route to intercept notifications API and return mock data
  * @param {import('@playwright/test').Page} page
  * @param {Array|Object} notifications - Mock notification data to return
  */
 async function mockNotificationsApi(page, notifications) {
-  // Match the URL pattern used by the plugin - handles both / and %2F encoding
-  // Pattern: /wp-json/newfold-notifications/v1/notifications
-  await page.route(/newfold-notifications(%2F|\/)v1(%2F|\/)notifications/, async (route) => {
-    const method = route.request().method();
+  await page.route(isNewfoldNotificationsApiUrl, async (route) => {
+    const request = route.request();
+    const method = request.method();
+    const url = new URL(request.url());
+    const headers = request.headers();
+    const methodOverride = (
+      headers['x-http-method-override'] ||
+      headers['X-HTTP-Method-Override'] ||
+      ''
+    ).toUpperCase();
+
     if (method === 'GET') {
       await route.fulfill({
         status: 200,
         contentType: 'application/json',
         body: JSON.stringify(notifications),
       });
-    } else if (method === 'POST') {
-      // Handle dismiss/events endpoints
-      const url = route.request().url();
-      if (url.includes('events')) {
+      return;
+    }
+
+    // Dismiss: REST DELETE to .../notifications/{id}. @wordpress/api-fetch http-v1 middleware
+    // sends POST + X-HTTP-Method-Override: DELETE instead of a real DELETE (see notification/index.js).
+    const isDeleteDismiss =
+      method === 'DELETE' ||
+      (method === 'POST' && methodOverride === 'DELETE');
+
+    if (isDeleteDismiss) {
+      const id = parseNotificationDismissId(url) || 'dismissed';
+      await route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify({ id }),
+      });
+      return;
+    }
+
+    if (method === 'POST') {
+      const urlStr = request.url();
+      if (urlStr.includes('events')) {
         await route.fulfill({
           status: 201,
           contentType: 'application/json',
@@ -331,9 +402,10 @@ async function mockNotificationsApi(page, notifications) {
           body: JSON.stringify({ id: 'dismissed' }),
         });
       }
-    } else {
-      await route.continue();
+      return;
     }
+
+    await route.continue();
   });
 }
 
@@ -345,8 +417,7 @@ async function mockNotificationsApi(page, notifications) {
 async function setupMockAndNavigateHome(page, notifications) {
   await mockNotificationsApi(page, notifications);
   await page.goto(`/wp-admin/admin.php?page=${pluginId}#/home`);
-  // Wait for notifications wrapper to ensure page is loaded (there may be multiple wrappers)
-  await page.locator(SELECTORS.notificationsWrapper).first().waitFor({ state: 'attached', timeout: 10000 });
+  await waitForNotificationsUi(page);
 }
 
 /**
@@ -357,8 +428,7 @@ async function setupMockAndNavigateHome(page, notifications) {
 async function setupMockAndNavigateSettings(page, notifications) {
   await mockNotificationsApi(page, notifications);
   await page.goto(`/wp-admin/admin.php?page=${pluginId}#/settings`);
-  // Wait for notifications wrapper to ensure page is loaded (there may be multiple wrappers)
-  await page.locator(SELECTORS.notificationsWrapper).first().waitFor({ state: 'attached', timeout: 10000 });
+  await waitForNotificationsUi(page);
 }
 
 export {
@@ -384,6 +454,7 @@ export {
   navigateToThemeInstall,
   closeAiModalIfPresent,
   mockNotificationsApi,
+  waitForNotificationsUi,
   setupMockAndNavigateHome,
   setupMockAndNavigateSettings,
 };
