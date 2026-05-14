@@ -21,6 +21,7 @@ jobs:
   get-repo-name:
     runs-on: ubuntu-latest
     permissions: {} # Uses only github.repository in a shell echo; no checkout or github.token REST calls.
+    timeout-minutes: 5
     outputs:
       repository-name: ${{ steps.repo-name.outputs.name }}
     steps:

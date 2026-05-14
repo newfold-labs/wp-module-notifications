@@ -19,6 +19,7 @@ jobs:
     name: Setup
     runs-on: ubuntu-latest
     permissions: {} # No workflow steps call the GitHub REST API with github.token.
+    timeout-minutes: 5
     outputs:
       branch: ${{ steps.extract_branch.outputs.branch }}
     steps:
