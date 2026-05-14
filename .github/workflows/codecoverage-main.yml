@@ -21,7 +21,6 @@ jobs:
   get-repo-name:
     runs-on: ubuntu-latest
     permissions: {} # Uses only github.repository in a shell echo; no checkout or github.token REST calls.
-    timeout-minutes: 5
     outputs:
       repository-name: ${{ steps.repo-name.outputs.name }}
     steps:
@@ -31,11 +30,10 @@ jobs:
 
   codecoverage:
     needs: get-repo-name
+    uses: newfold-labs/workflows/.github/workflows/reusable-codecoverage.yml@main
     permissions:
       contents: write       # Required for reusable codecoverage to push coverage HTML to gh-pages.
       pull-requests: write  # Required for reusable codecoverage PR comments using secrets.repo_token.
-    timeout-minutes: 90
-    uses: newfold-labs/workflows/.github/workflows/reusable-codecoverage.yml@main
     with:
       php-versions: '["7.4", "8.0", "8.1", "8.2", "8.3", "8.4"]'
       coverage-php-version: '7.4'
