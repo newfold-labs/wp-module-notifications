@@ -19,6 +19,7 @@ jobs:
     name: Setup
     runs-on: ubuntu-latest
     permissions: {} # No workflow steps call the GitHub REST API with github.token.
+    timeout-minutes: 5
     outputs:
       branch: ${{ steps.extract_branch.outputs.branch }}
     steps:
@@ -33,6 +34,7 @@ jobs:
     needs: setup
     permissions:
       contents: read # Required so the reusable workflow can clone private repos with github.token via actions/checkout.
+    timeout-minutes: 60
     uses: newfold-labs/workflows/.github/workflows/module-plugin-test-playwright.yml@main
     with:
       module-repo: ${{ github.repository }}
@@ -45,6 +47,7 @@ jobs:
     needs: setup
     permissions:
       contents: read # Required so the reusable workflow can clone private repos with github.token via actions/checkout.
+    timeout-minutes: 60
     uses: newfold-labs/workflows/.github/workflows/module-plugin-test-playwright.yml@main
     with:
       module-repo: ${{ github.repository }}
