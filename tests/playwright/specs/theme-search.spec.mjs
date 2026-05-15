@@ -33,10 +33,11 @@ test.describe('Theme Search', () => {
     const themeBrowser = page.locator(SELECTORS.themeBrowser);
     await expect(themeBrowser.first()).toBeVisible({ timeout: 30000 });
 
-    // Verify matching search result appears
-    const searchResult = page.locator(SELECTORS.themeSearchResult);
-    await searchResult.scrollIntoViewIfNeeded();
-    await expect(searchResult).toBeVisible();
+    // Theme grid can re-render after search; wait for the exact row instead of scrolling early.
+    const searchResult = page.locator(
+      `${SELECTORS.themeSearchResult}[data-id="test-termA"]`,
+    );
+    await expect(searchResult).toBeVisible({ timeout: 30000 });
     await expect(searchResult).toHaveAttribute('data-id', 'test-termA');
   });
 
@@ -54,14 +55,11 @@ test.describe('Theme Search', () => {
     const themeBrowser = page.locator(SELECTORS.themeBrowser);
     await expect(themeBrowser.first()).toBeVisible({ timeout: 30000 });
 
-    // Verify the displayed result is for termB, not termA
-    const searchResult = page.locator(SELECTORS.themeSearchResult);
-    await searchResult.scrollIntoViewIfNeeded();
-    await expect(searchResult).toBeVisible();
-    await expect(searchResult).toHaveAttribute('data-id');
-    
-    const dataId = await searchResult.getAttribute('data-id');
-    expect(dataId).not.toBe('test-termA');
+    const searchResult = page.locator(
+      `${SELECTORS.themeSearchResult}[data-id="test-termB"]`,
+    );
+    await expect(searchResult).toBeVisible({ timeout: 30000 });
+    await expect(searchResult).toHaveAttribute('data-id', 'test-termB');
   });
 });
 
