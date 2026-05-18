@@ -8,6 +8,23 @@ import {
   mockNotificationsApi,
 } from '../helpers/index.mjs';
 
+/** Resolve after the realtime module finishes POSTing search metadata to `.../notifications/events`. */
+function whenNotificationsSearchEventsComplete(page) {
+  return page.waitForResponse(
+    (response) => {
+      if (response.request().method() !== 'POST') {
+        return false;
+      }
+      const url = response.url();
+      if (!url.includes('newfold-notifications') || !url.includes('events')) {
+        return false;
+      }
+      return response.status() === 201;
+    },
+    { timeout: 30000 },
+  );
+}
+
 test.describe('Theme Search', () => {
   test.beforeEach(async ({ page }) => {
     await auth.loginToWordPress(page);
@@ -26,17 +43,30 @@ test.describe('Theme Search', () => {
 
     // Clear and type search query
     const searchInput = page.locator(SELECTORS.themeSearchInput);
+    const eventsDone = whenNotificationsSearchEventsComplete(page);
     await searchInput.clear();
     await searchInput.fill('termA');
+    await eventsDone;
 
-    // Wait for theme browser to load
-    const themeBrowser = page.locator(SELECTORS.themeBrowser);
-    await expect(themeBrowser.first()).toBeVisible({ timeout: 30000 });
-
-    // Verify matching search result appears
-    const searchResult = page.locator(SELECTORS.themeSearchResult);
-    await searchResult.scrollIntoViewIfNeeded();
-    await expect(searchResult).toBeVisible();
+    // WP sets `body.loading-content` during admin-ajax `query-themes`, which hides
+    // `.content-filterable` — the tile can exist in the DOM but stay non-visible until that clears.
+    const searchResult = page.locator(
+      `${SELECTORS.themeSearchResult}[data-id="test-termA"]`,
+    );
+    await expect
+      .poll(
+        async () => {
+          const blocked = await page.evaluate(() =>
+            document.body.classList.contains('loading-content'),
+          );
+          if (blocked) {
+            return false;
+          }
+          return searchResult.isVisible();
+        },
+        { timeout: 30000 },
+      )
+      .toBe(true);
     await expect(searchResult).toHaveAttribute('data-id', 'test-termA');
   });
 
@@ -46,22 +76,30 @@ test.describe('Theme Search', () => {
 
     await navigateToThemeInstall(page);
 
-    // Type search query for termB
     const searchInput = page.locator(SELECTORS.themeSearchInput);
+    const eventsDone = whenNotificationsSearchEventsComplete(page);
+    await searchInput.clear();
     await searchInput.fill('termB');
+    await eventsDone;
 
-    // Wait for theme browser to load
-    const themeBrowser = page.locator(SELECTORS.themeBrowser);
-    await expect(themeBrowser.first()).toBeVisible({ timeout: 30000 });
-
-    // Verify the displayed result is for termB, not termA
-    const searchResult = page.locator(SELECTORS.themeSearchResult);
-    await searchResult.scrollIntoViewIfNeeded();
-    await expect(searchResult).toBeVisible();
-    await expect(searchResult).toHaveAttribute('data-id');
-    
-    const dataId = await searchResult.getAttribute('data-id');
-    expect(dataId).not.toBe('test-termA');
+    const searchResult = page.locator(
+      `${SELECTORS.themeSearchResult}[data-id="test-termB"]`,
+    );
+    await expect
+      .poll(
+        async () => {
+          const blocked = await page.evaluate(() =>
+            document.body.classList.contains('loading-content'),
+          );
+          if (blocked) {
+            return false;
+          }
+          return searchResult.isVisible();
+        },
+        { timeout: 30000 },
+      )
+      .toBe(true);
+    await expect(searchResult).toHaveAttribute('data-id', 'test-termB');
   });
 });
 
