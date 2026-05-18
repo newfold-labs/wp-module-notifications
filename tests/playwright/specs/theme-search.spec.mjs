@@ -8,6 +8,23 @@ import {
   mockNotificationsApi,
 } from '../helpers/index.mjs';
 
+/** Resolve after the realtime module finishes POSTing search metadata to `.../notifications/events`. */
+function whenNotificationsSearchEventsComplete(page) {
+  return page.waitForResponse(
+    (response) => {
+      if (response.request().method() !== 'POST') {
+        return false;
+      }
+      const url = response.url();
+      if (!url.includes('newfold-notifications') || !url.includes('events')) {
+        return false;
+      }
+      return response.status() === 201;
+    },
+    { timeout: 30000 },
+  );
+}
+
 test.describe('Theme Search', () => {
   test.beforeEach(async ({ page }) => {
     await auth.loginToWordPress(page);
@@ -26,8 +43,10 @@ test.describe('Theme Search', () => {
 
     // Clear and type search query
     const searchInput = page.locator(SELECTORS.themeSearchInput);
+    const eventsDone = whenNotificationsSearchEventsComplete(page);
     await searchInput.clear();
     await searchInput.fill('termA');
+    await eventsDone;
 
     // WP sets `body.loading-content` during admin-ajax `query-themes`, which hides
     // `.content-filterable` — the tile can exist in the DOM but stay non-visible until that clears.
@@ -57,9 +76,11 @@ test.describe('Theme Search', () => {
 
     await navigateToThemeInstall(page);
 
-    // Type search query for termB
     const searchInput = page.locator(SELECTORS.themeSearchInput);
+    const eventsDone = whenNotificationsSearchEventsComplete(page);
+    await searchInput.clear();
     await searchInput.fill('termB');
+    await eventsDone;
 
     const searchResult = page.locator(
       `${SELECTORS.themeSearchResult}[data-id="test-termB"]`,
