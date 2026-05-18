@@ -29,15 +29,25 @@ test.describe('Theme Search', () => {
     await searchInput.clear();
     await searchInput.fill('termA');
 
-    // Wait for theme browser to load
-    const themeBrowser = page.locator(SELECTORS.themeBrowser);
-    await expect(themeBrowser.first()).toBeVisible({ timeout: 30000 });
-
-    // Theme grid can re-render after search; wait for the exact row instead of scrolling early.
+    // WP sets `body.loading-content` during admin-ajax `query-themes`, which hides
+    // `.content-filterable` — the tile can exist in the DOM but stay non-visible until that clears.
     const searchResult = page.locator(
       `${SELECTORS.themeSearchResult}[data-id="test-termA"]`,
     );
-    await expect(searchResult).toBeVisible({ timeout: 30000 });
+    await expect
+      .poll(
+        async () => {
+          const blocked = await page.evaluate(() =>
+            document.body.classList.contains('loading-content'),
+          );
+          if (blocked) {
+            return false;
+          }
+          return searchResult.isVisible();
+        },
+        { timeout: 30000 },
+      )
+      .toBe(true);
     await expect(searchResult).toHaveAttribute('data-id', 'test-termA');
   });
 
@@ -51,14 +61,23 @@ test.describe('Theme Search', () => {
     const searchInput = page.locator(SELECTORS.themeSearchInput);
     await searchInput.fill('termB');
 
-    // Wait for theme browser to load
-    const themeBrowser = page.locator(SELECTORS.themeBrowser);
-    await expect(themeBrowser.first()).toBeVisible({ timeout: 30000 });
-
     const searchResult = page.locator(
       `${SELECTORS.themeSearchResult}[data-id="test-termB"]`,
     );
-    await expect(searchResult).toBeVisible({ timeout: 30000 });
+    await expect
+      .poll(
+        async () => {
+          const blocked = await page.evaluate(() =>
+            document.body.classList.contains('loading-content'),
+          );
+          if (blocked) {
+            return false;
+          }
+          return searchResult.isVisible();
+        },
+        { timeout: 30000 },
+      )
+      .toBe(true);
     await expect(searchResult).toHaveAttribute('data-id', 'test-termB');
   });
 });
