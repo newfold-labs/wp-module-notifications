@@ -36,6 +36,11 @@ test.describe('Theme Search', () => {
   });
 
   test('should display matching theme search results', async ({ page }) => {
+    // Generous budget: beforeEach's WP-CLI transient cleanup and the live
+    // theme-browser search can each vary under CI load, and both precede the
+    // expect.poll below, which needs its own full 30s of headroom.
+    test.setTimeout(60_000);
+
     const notifications = createThemeSearchNotifications();
     await mockNotificationsApi(page, notifications);
 
@@ -71,6 +76,9 @@ test.describe('Theme Search', () => {
   });
 
   test('should not display non-matching theme search results', async ({ page }) => {
+    // See the timeout note in the previous test.
+    test.setTimeout(60_000);
+
     const notifications = createThemeSearchNotifications();
     await mockNotificationsApi(page, notifications);
 
