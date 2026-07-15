@@ -6,6 +6,7 @@ import {
   clearNotificationsTransient,
   navigateToThemeInstall,
   mockNotificationsApi,
+  mockThemeSearchAjax,
 } from '../helpers/index.mjs';
 
 /** Resolve after the realtime module finishes POSTing search metadata to `.../notifications/events`. */
@@ -43,6 +44,7 @@ test.describe('Theme Search', () => {
   test('should display matching theme search results', async ({ page }) => {
     const notifications = createThemeSearchNotifications();
     await mockNotificationsApi(page, notifications);
+    await mockThemeSearchAjax(page);
 
     await navigateToThemeInstall(page);
 
@@ -78,6 +80,7 @@ test.describe('Theme Search', () => {
   test('should not display non-matching theme search results', async ({ page }) => {
     const notifications = createThemeSearchNotifications();
     await mockNotificationsApi(page, notifications);
+    await mockThemeSearchAjax(page);
 
     await navigateToThemeInstall(page);
 
