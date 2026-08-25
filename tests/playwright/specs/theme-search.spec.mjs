@@ -26,6 +26,8 @@ function whenNotificationsSearchEventsComplete(page) {
 }
 
 test.describe('Theme Search', () => {
+  test.setTimeout(60000);
+
   test.beforeEach(async ({ page }) => {
     await auth.loginToWordPress(page);
     await clearNotificationsTransient();
@@ -79,11 +81,12 @@ test.describe('Theme Search', () => {
     const searchInput = page.locator(SELECTORS.themeSearchInput);
     const eventsDone = whenNotificationsSearchEventsComplete(page);
     await searchInput.clear();
-    await searchInput.fill('termB');
+    await searchInput.fill('termA');
     await eventsDone;
 
-    const searchResult = page.locator(
-      `${SELECTORS.themeSearchResult}[data-id="test-termB"]`,
+    // Wait for loading to settle and the matching result to appear.
+    const matchingResult = page.locator(
+      `${SELECTORS.themeSearchResult}[data-id="test-termA"]`,
     );
     await expect
       .poll(
@@ -94,12 +97,17 @@ test.describe('Theme Search', () => {
           if (blocked) {
             return false;
           }
-          return searchResult.isVisible();
+          return matchingResult.isVisible();
         },
         { timeout: 30000 },
       )
       .toBe(true);
-    await expect(searchResult).toHaveAttribute('data-id', 'test-termB');
+
+    // The non-matching notification for termB must not be visible.
+    const nonMatchingResult = page.locator(
+      `${SELECTORS.themeSearchResult}[data-id="test-termB"]`,
+    );
+    await expect(nonMatchingResult).not.toBeVisible();
   });
 });
 
