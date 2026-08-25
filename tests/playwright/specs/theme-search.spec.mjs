@@ -26,7 +26,7 @@ function whenNotificationsSearchEventsComplete(page) {
 }
 
 test.describe('Theme Search', () => {
-  test.setTimeout(60000);
+  test.describe.configure({ timeout: 60000 });
 
   test.beforeEach(async ({ page }) => {
     await auth.loginToWordPress(page);
@@ -103,11 +103,11 @@ test.describe('Theme Search', () => {
       )
       .toBe(true);
 
-    // The non-matching notification for termB must not be visible.
+    // The non-matching notification for termB must not exist in the DOM.
     const nonMatchingResult = page.locator(
       `${SELECTORS.themeSearchResult}[data-id="test-termB"]`,
     );
-    await expect(nonMatchingResult).not.toBeVisible();
+    await expect(nonMatchingResult).toHaveCount(0);
   });
 });
 
