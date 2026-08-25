@@ -6,6 +6,7 @@ import {
   clearNotificationsTransient,
   navigateToThemeInstall,
   mockNotificationsApi,
+  mockThemeSearchAjax,
 } from '../helpers/index.mjs';
 
 /** Resolve after the realtime module finishes POSTing search metadata to `.../notifications/events`. */
@@ -31,6 +32,8 @@ test.describe('Theme Search', () => {
   test.beforeEach(async ({ page }) => {
     await auth.loginToWordPress(page);
     await clearNotificationsTransient();
+    await mockNotificationsApi(page, createThemeSearchNotifications());
+    await mockThemeSearchAjax(page);
   });
 
   test.afterAll(async () => {
@@ -38,9 +41,6 @@ test.describe('Theme Search', () => {
   });
 
   test('should display matching theme search results', async ({ page }) => {
-    const notifications = createThemeSearchNotifications();
-    await mockNotificationsApi(page, notifications);
-
     await navigateToThemeInstall(page);
 
     // Clear and type search query
@@ -73,9 +73,6 @@ test.describe('Theme Search', () => {
   });
 
   test('should not display non-matching theme search results', async ({ page }) => {
-    const notifications = createThemeSearchNotifications();
-    await mockNotificationsApi(page, notifications);
-
     await navigateToThemeInstall(page);
 
     const searchInput = page.locator(SELECTORS.themeSearchInput);
