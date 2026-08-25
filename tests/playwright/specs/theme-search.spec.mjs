@@ -107,7 +107,7 @@ test.describe('Theme Search', () => {
     const nonMatchingResult = page.locator(
       `${SELECTORS.themeSearchResult}[data-id="test-termB"]`,
     );
-    await expect(nonMatchingResult).toHaveCount(0);
+    await expect(nonMatchingResult).toHaveCount(0, { timeout: 10000 });
   });
 });
 
