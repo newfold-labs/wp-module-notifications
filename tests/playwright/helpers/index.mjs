@@ -410,6 +410,36 @@ async function mockNotificationsApi(page, notifications) {
 }
 
 /**
+ * Intercept WP core's own theme-search AJAX (admin-ajax.php action=query-themes) so
+ * theme-install.php never depends on a live network round-trip to the WordPress.org
+ * theme repository. Returns the same shape as WP core's wp_send_json_success( $api )
+ * with zero themes, which core renders as a normal empty-results state (removes
+ * `loading-content`, adds `rendered`) — the state these tests' promo tile waits on.
+ * @param {import('@playwright/test').Page} page
+ */
+async function mockThemeSearchAjax(page) {
+  await page.route(
+    (url) => url.pathname.endsWith('/wp-admin/admin-ajax.php'),
+    async (route) => {
+      const request = route.request();
+      const postData = request.postData() || '';
+      if (request.method() === 'POST' && postData.includes('action=query-themes')) {
+        await route.fulfill({
+          status: 200,
+          contentType: 'application/json',
+          body: JSON.stringify({
+            success: true,
+            data: { themes: [], info: { page: 1, pages: 0, results: 0 } },
+          }),
+        });
+        return;
+      }
+      await route.continue();
+    },
+  );
+}
+
+/**
  * Setup route and navigate to plugin home with mocked notifications
  * @param {import('@playwright/test').Page} page
  * @param {Array|Object} notifications - Mock notification data to return
@@ -454,6 +484,7 @@ export {
   navigateToThemeInstall,
   closeAiModalIfPresent,
   mockNotificationsApi,
+  mockThemeSearchAjax,
   waitForNotificationsUi,
   setupMockAndNavigateHome,
   setupMockAndNavigateSettings,

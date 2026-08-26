@@ -6,6 +6,7 @@ import {
   clearNotificationsTransient,
   navigateToThemeInstall,
   mockNotificationsApi,
+  mockThemeSearchAjax,
 } from '../helpers/index.mjs';
 
 /** Resolve after the realtime module finishes POSTing search metadata to `.../notifications/events`. */
@@ -26,9 +27,13 @@ function whenNotificationsSearchEventsComplete(page) {
 }
 
 test.describe('Theme Search', () => {
+  test.describe.configure({ timeout: 60000 });
+
   test.beforeEach(async ({ page }) => {
     await auth.loginToWordPress(page);
     await clearNotificationsTransient();
+    await mockNotificationsApi(page, createThemeSearchNotifications());
+    await mockThemeSearchAjax(page);
   });
 
   test.afterAll(async () => {
@@ -36,9 +41,6 @@ test.describe('Theme Search', () => {
   });
 
   test('should display matching theme search results', async ({ page }) => {
-    const notifications = createThemeSearchNotifications();
-    await mockNotificationsApi(page, notifications);
-
     await navigateToThemeInstall(page);
 
     // Clear and type search query
@@ -71,19 +73,17 @@ test.describe('Theme Search', () => {
   });
 
   test('should not display non-matching theme search results', async ({ page }) => {
-    const notifications = createThemeSearchNotifications();
-    await mockNotificationsApi(page, notifications);
-
     await navigateToThemeInstall(page);
 
     const searchInput = page.locator(SELECTORS.themeSearchInput);
     const eventsDone = whenNotificationsSearchEventsComplete(page);
     await searchInput.clear();
-    await searchInput.fill('termB');
+    await searchInput.fill('termA');
     await eventsDone;
 
-    const searchResult = page.locator(
-      `${SELECTORS.themeSearchResult}[data-id="test-termB"]`,
+    // Wait for loading to settle and the matching result to appear.
+    const matchingResult = page.locator(
+      `${SELECTORS.themeSearchResult}[data-id="test-termA"]`,
     );
     await expect
       .poll(
@@ -94,12 +94,17 @@ test.describe('Theme Search', () => {
           if (blocked) {
             return false;
           }
-          return searchResult.isVisible();
+          return matchingResult.isVisible();
         },
         { timeout: 30000 },
       )
       .toBe(true);
-    await expect(searchResult).toHaveAttribute('data-id', 'test-termB');
+
+    // The non-matching notification for termB must not exist in the DOM.
+    const nonMatchingResult = page.locator(
+      `${SELECTORS.themeSearchResult}[data-id="test-termB"]`,
+    );
+    await expect(nonMatchingResult).toHaveCount(0, { timeout: 10000 });
   });
 });
 
