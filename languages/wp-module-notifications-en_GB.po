@@ -14,10 +14,6 @@ msgstr ""
 "X-Domain: wp-module-notifications\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: bootstrap.php:14
-msgid "Notifications"
-msgstr "Notifications"
-
 #: includes/NotificationsApi.php:88
 msgid "Event action"
 msgstr "Event action"
@@ -29,6 +25,10 @@ msgstr "Event category"
 #: includes/NotificationsApi.php:103
 msgid "Event data"
 msgstr "Event data"
+
+#: bootstrap.php:14
+msgid "Notifications"
+msgstr "Notifications"
 
 #: includes/NotificationsApi.php:108
 msgid "Whether or not to queue the event"
