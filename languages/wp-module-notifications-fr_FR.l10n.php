@@ -2,12 +2,12 @@
 return [
 	'domain' => 'wp-module-notifications',
 	'plural-forms' => 'nplurals=2; plural=(n > 1);',
-	'language' => 'fr',
+	'language' => 'fr_FR',
 	'project-id-version' => '',
 	'pot-creation-date' => '2025-02-13T09:55:55+00:00',
-	'po-revision-date' => '2026-08-26T14:57:20+00:00',
+	'po-revision-date' => '2026-08-27T19:07:14+00:00',
 	'x-generator' => 'WP-CLI 2.12.0',
 	'messages' => [
-,
+		'Notifications' => 'Notifications',
 	],
 ];
