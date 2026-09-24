@@ -6,7 +6,7 @@ import {
   clearNotificationsTransient,
   navigateToPluginInstall,
   mockNotificationsApi,
-} from '../helpers/index.mjs';
+} from '../helpers/index.js';
 
 test.describe('Plugin Search', () => {
   test.beforeEach(async ({ page }) => {

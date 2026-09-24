@@ -9,7 +9,7 @@ import {
   closeAiModalIfPresent,
   mockNotificationsApi,
   waitForNotificationsUi,
-} from '../helpers/index.mjs';
+} from '../helpers/index.js';
 
 test.describe('Notifications', () => {
   test.afterAll(async () => {
