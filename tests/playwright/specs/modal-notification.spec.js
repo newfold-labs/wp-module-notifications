@@ -7,7 +7,7 @@ import {
   clearNotificationsTransient,
   mockNotificationsApi,
   waitForNotificationsUi,
-} from '../helpers/index.mjs';
+} from '../helpers/index.js';
 
 // AI notification tests are only for bluehost plugin
 test.describe('AI Notification', () => {

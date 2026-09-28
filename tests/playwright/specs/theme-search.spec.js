@@ -7,7 +7,7 @@ import {
   navigateToThemeInstall,
   mockNotificationsApi,
   mockThemeSearchAjax,
-} from '../helpers/index.mjs';
+} from '../helpers/index.js';
 
 /** Resolve after the realtime module finishes POSTing search metadata to `.../notifications/events`. */
 function whenNotificationsSearchEventsComplete(page) {
